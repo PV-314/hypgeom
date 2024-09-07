@@ -42,6 +42,8 @@ do_lemma24_check(checkGcd,checkDMod8=1)={
 			if(length(solnP4)!=0,
 				t=solnP4[1];
 				u=solnP4[2];
+				d1=core(d);
+				d2=sqrtint(d/d1);
 				forprime(p=2,23,
 				for(m1=0,5,
 				for(m2=0,5,
@@ -51,11 +53,11 @@ do_lemma24_check(checkGcd,checkDMod8=1)={
 					);
 					if(isDOK,
 						e1=2^m1*p^m2;
-						if(!checkGcd || (checkGcd && gcd(e1,d)==1),
+						if(!checkGcd || (checkGcd && gcd(e1,d2)==1),
 							check_d_and_e(d,e1,t,u);
 						);
 						e2=-2^m1*p^m2;
-						if(!checkGcd || (checkGcd && gcd(e2,d)==1),
+						if(!checkGcd || (checkGcd && gcd(e2,d2)==1),
 							check_d_and_e(d,e2,t,u);
 						);
 					);
