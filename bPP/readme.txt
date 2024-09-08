@@ -19,11 +19,9 @@ Use bPP-end-proof-check.gp afterwards to complete all the pre-Magma work for the
 
 bPP-square-search.gp
 This is used to find sequences with several squares in them, having b=2^ell*p^m, where ell=0,1,2,3,4
-Used for generating such examples in the Examples section
+Used for generating such examples in the Examples section,
+including the function, b16pm_family() for the b=16*p^m family.
 
 bPP-yLB-check.gp
 This is used to find examples for Lemma 2.1.
 That is with y_k small relative to b^2 for k \neq 0
-
-
-

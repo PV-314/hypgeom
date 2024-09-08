@@ -7,26 +7,25 @@ read("hypgeom\\general\\hypg-utils.gp");
 
 \\ 4 Sept 2024
 eqn_soln_search(mul,dbg=0)={
-	my(c0,c1,isPP,nrmA,nrmACore,pLB,pow2,solnM4,solnP4,t,u,solns,startTime,uUB,y0,yM1,yP1);
+	my(b,d,pLB,solnM4,solns,xSqr);
 
 	if(mul!=1 && mul!=2 && mul!=4 && mul!=8 && mul!=16,
 		print("BAD: mul=",mul,". It must be 1,2,4,8,16.");
 		return();
 	);
-	pow2=2^100;
 	pLB=2;
 	if(mul>1,
 		pLB=3;
 	);
 	for(a=1,10000,
-	if(a%100==0,print("starting a=",a));
+	if(a%500==0,print("starting a=",a));
 	forprime(p=pLB,1000000,
 	for(m=1,6,
 		b=mul*p^m;
 		d=a*a+b;
 		if(p==2 || (p>2 && d%8!=1),
 			solnM4=solve_pell_minus4(d);
-			if(length(solnM4)>0,
+			if(issquarefree(gcd(a*a,b)) && length(solnM4)>0,
 				solns=List([[a,1]]);
 				for(y=2,10000,
 					xSqr=-b+d*y*y*y*y;
