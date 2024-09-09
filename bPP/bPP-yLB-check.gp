@@ -297,7 +297,11 @@ search_b2(b)={
 	);
 }
 
-\\ initial search for the small y_k when b is a prime power, where the solutions are like in these examples:
+\\ a smarter search for good examples for Lemma 2.4()a when b is a prime power
+\\ this enabled us to find the third example
+\\
+\\ basis:
+\\ the initial search for the small y_k when b is a prime power, where the solutions are like in these examples:
 \\ this function is based on these examples:
 \\ SMALL y for eqn (2.3) : a:=   685: b:= 71647: d:=   540872: t:=   18386: u:=    25: nrmE:= -1: y:= 18068: ykb2Ratio:= 0.063595: k:= 1: b1:=   1: r:=  25: b2:=71647: s:=   1: g1:= 1: g2:= 1:
 \\ SMALL y for eqn (2.3) : a:=   353: b:= 19207: d:=   143816: t:=    4930: u:=    13: nrmE:= -1: y:=  4844: ykb2Ratio:= 0.063605: k:= 1: b1:=   1: r:=  13: b2:=19207: s:=   1: g1:= 1: g2:= 1:
@@ -305,29 +309,79 @@ search_b2(b)={
 \\ 2y-(t+a*u)=b1*r*r, with b1=1, r=u
 \\ and 2*y+(t+a*u)=b2*s*s, with b2=b, s=1
 \\ restart:tv:=(b-2*a*u-u*u)/2:expand(tv^2-(a*a+b)*u^2);factor(4*%);
-\\ 28 Aug 2024
-search_parta_1()={
+\\ but in fact, from this and once we have t and u, we can solve for a and then for b such that t^2-(a*a+b)*u^2=\pm 4
+\\
+\\ large tUB here so that the 3rd example (with u=865) is found
+\\ 9 Sept 2024
+search_parta_1(uLB)={
 	my(t,v,yk);
-	
-	for(u=1,300,
+
+	if(uLB%2==0,
+		print("ERROR: uLB=",uLB," must be odd.");
+		return();
+	);
+	tUB=100*1000*1000;
+	forstep(u=uLB,1000,2,
 		u2=u*u;
 		u3=u2*u;
 		u4=u3*u;
-		if(u%2==1,print("starting u=",u));
-		for(a=1,1500,
-		for(b=1,100000,
-			v=b*b-4*b*a*u-6*b*u2+4*a*u3+u4;
-			if(abs(v)==16,
-				t=(b-2*a*u-u2)/2;
-				if(t>0 && denominator(t)==1,
-					yk=(t+a*u)*(t+a*u)+b*u2;
-					if(yk%4==0 && issquare(yk),
-						yk=yk/4;
-						printf("a=%4d, b=%6d, t=%6d, u=%3d, y_k=%9d, y_k/b^2=%9.6f\n",a,b,t,u,yk,yk/b/b);
+		if(u%20==1,print("starting u=",u));
+		for(t=1,tUB,
+			t2=t*t;
+			v=t2+4;
+			vModU2=v%u2;
+			if(vModU2==0 || vModU2==8,
+				u2t = 2*u2*t;
+				v1 = t2-4-u2t;
+				v2 = v1+8;
+				\\print("t=",t,", u=",u,", v1="+v1);
+				if (issquare(v1),
+					v1Sqrt=sqrtint(v1);
+					if(v1Sqrt%u==0,
+						a=(v1Sqrt-u2)/u;
+						b=u2+2*a*u+2*t;
+						d= a*a+b;
+						nrmE = t2-d*u2;
+						if(nrmE==4 || nrmE==-4,
+							yk=t+a*u;
+							yk=yk*yk;
+							yk=yk+b*u2;
+							if(a>0 && yk%4==0,
+								yk=yk/4;
+								if(1.0*yk/b/b<0.07,
+									printf("a=%7d, b=%10d, t=%10d, u=%4d, y_k=%18d, y_k/b^2=%9.6f\n",a,b,t,u,yk,1.0*yk/b/b);
+									if(isprime(b),
+										print("PRIME!!!");
+									);
+								);
+							);
+						);
+					);
+				);
+				if(issquare(v2),
+					v2Sqrt=sqrtint(v2);
+					if(v2Sqrt%u==0,
+						a=(v2Sqrt-u2)/u;
+						b=u2+2*a*u+2*t;
+						d= a*a+b;
+						nrmE = t2-d*u2;
+						if(nrmE==4 || nrmE==-4,
+							yk=t+a*u;
+							yk=yk*yk;
+							yk=yk+b*u2;
+							if(a>0 && yk%4==0,
+								yk=yk/4;
+								if(1.0*yk/b/b<0.07,
+									printf("a=%7d, b=%10d, t=%10d, u=%4d, y_k=%18d, y_k/b^2=%9.6f\n",a,b,t,u,yk,1.0*yk/b/b);
+									if(isprime(b),
+										print("PRIME!!!");
+									);
+								);
+							);
+						);
 					);
 				);
 			);
-		);
 		);
 	);
 }
