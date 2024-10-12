@@ -146,29 +146,7 @@ bPP_check()={
 	step2UBConsta=4*step2UBConst;
 	step2UBConsta=round_up(step2UBConsta,3);
 	printf("for r_0=1: %8.6f*((a*a+b)/b)*y_k^3 > y_ell\n",step2UBConsta);
-	
-	print("\nEffectivity: Subsection 3.5");
-	y2UB2Const=y2UB2EvenCnst;
-	y2UB2Const=y2UB2Const^(1/3);
-	y2UB2Const=round_up(y2UB2Const,3);
-	printf("b even: y_ell<%8.6f*b^(2/3)*y_k^(5/3)\n",y2UB2Const);
-
-	y2UB3Const=(1/y1LBEvenDenom)^(4/3)*bLB*dLB;
-	y2UB3Const=round_down(y2UB3Const,4);
-	printf("b even: %8.6f*b^(2/3)*y_k^(5/3)<(a^2+b)/b*y_k^3\n",y2UB3Const);
-	printf("b even: y_ell<%4d*(a^2+b)/b*y_k^3\n",ceil(y2UB2Const/y2UB3Const));
-
-	y2UB2Const=y2UB2OddCnst;
-	\\print("y2UB2Const=",y2UB2Const);
-	y2UB2Const=y2UB2Const^(1/3);
-	y2UB2Const=round_up(y2UB2Const,3);
-	printf("b odd : y_ell<%8.6f*b^(2/3)*y_k^(5/3)\n",y2UB2Const);
-
-	y2UB3Const=(1/y1LBOddDenom)^(4/3)*bLB*dLB;
-	y2UB3Const=round_down(y2UB3Const,4);
-	printf("b odd : %8.6f*b^(2/3)*y_k^(5/3)<(a^2+b)/b*y_k^3\n",y2UB3Const);
-	printf("b odd : y_ell<%4d*(a^2+b)/b*y_k^3\n",ceil(y2UB2Const/y2UB3Const));
-	
+		
 	print("\nStep 3: Subsection 3.6");
 	\\ repeating step (iii) set-up from the bSqr script
 	qBnd=(qLB-1)/qLB;
