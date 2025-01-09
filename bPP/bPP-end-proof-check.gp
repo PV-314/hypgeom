@@ -56,8 +56,9 @@ check_dtu(d,t,u,dUB,msg,dbg=0)={
 
 \\ 28 Jan 2024
 check_abdtu(a,b,d,t,u,bLBDenom,msg,dbg=0)={
-	my(c0,c1,indices,out,seqCount,solnCount,solns,u0,y0,yk,yM1,yP1);
+	my(c0,c1,indices,out,seqCount,solnCount,solns,u0,y0,yk,ykLB,ykUB,yM1,yP1);
 
+	ykUB=1800*sqrt(b*b*b);
 	c1=(t*t+u*u*d)/2;
 	c0=(t*t-u*u*d)/4;
 	c0=c0*c0;
@@ -68,10 +69,15 @@ check_abdtu(a,b,d,t,u,bLBDenom,msg,dbg=0)={
 		out=make_sequences(c0,c1,yM1,y0,yP1,d,a,b,t,u,dbg);
 		indices=out[1];
 		solns=out[2];
+		ykLB=out[3];
+		if(ykLB<ykUB,
+			printf("ERROR: not enough terms created for d=%8d, a=%5d, b=%8d, t=%7d, u=%4d, largest term created=%9.6f, but need at least %9.6f\n",msg,d,a,b,t,u,ykLB,ykUB);
+			return();
+		);
 		seqCount=0;
 		for(i=1,length(solns),
 			yk=solns[i]*solns[i];
-			if(yk>1 && yk>b*b/bLBDenom && yk<1800*sqrt(b*b*b),
+			if(yk>1 && yk>b*b/bLBDenom && yk<ykUB,
 				if(seqCount==0,
 					do_magma_output(d,-b);
 					printf("//%s: d:=%8d: a:=%5d: b:=%8d: t:=%7d: u:=%4d: indices=%s, solns=%s\n",msg,d,a,b,t,u,indices,solns);

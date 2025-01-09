@@ -58,9 +58,9 @@ bPP_check()={
 	);
 	c3=pRts[1]; \\ notation c3 is from Lemma 3.6(b) (lemma to prove gap principle)
 	omega14UB=c3; \\ (2/y2LB/y2LB)^(1/4);
-	omega14UB=round_up(omega14UB,3);
+	omega14UB=round_up(omega14UB,4);
 	printf("omega14 approximation UB=%8.6f (like eqn (3.31)\n",omega14UB);
-	c1=omega14UB; \\0.16;
+	c1=omega14UB;
 	c2=(2-c1*c1)*sqrt(4-c1*c1); \\ from Lemma 3.6(a)
 	\\ 3 place in c2 gives 76.3 as the final constant in step 4:
 	c2=round_down(c2,4);
@@ -93,7 +93,7 @@ bPP_check()={
 	l0UB=round_up(l0UB,4);
 	printf("l_0<%8.6f*sqrt(b)/x_k\n",l0UB);
 	
-	print("\nStep 1: Subsection 3.3");
+	print("\nStep 1: Subsection 3.4");
 	v1=qUBCnst/gNd4Min; \\ using v1 as we have 21.47/2, but in paper use 10.74
 	v1=round_up(v1,6);
 	printf("v1(temp)=%9.6f\n",v1);
@@ -133,7 +133,7 @@ bPP_check()={
 		return();
 	);
 
-	print("\nStep 2: Subsection 3.4");
+	print("\nStep 2: Subsection 3.5");
 	dioLBConst=2/yR0LBConst*gamma14LBConst/gamma34UBConst;
 	dioLBConst=round_down(dioLBConst,4);
 	printf("dioLBConst(constant in lower bound for w^(1/4) approx)=%8.6f\n",dioLBConst);

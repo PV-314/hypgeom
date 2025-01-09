@@ -1,4 +1,14 @@
+Entries are in reverse chronological order (so latest entries come first)
 date format is yyyy-mm-dd
+
+2025-01-09
+==========
+add new element to the end of the array returned from make_sequences() in hypg-utils.gp.
+It now also returns a lower bound for the largest y_k calculated and checked
+
+check_abdtu() in bPP-end-proof-check.gp now uses this new element from make_sequences() for its checks
+
+effectivity parts of bPP-Prop31-sequence-proof-calcs.gp removed, as no longer included in paper
 
 2024-09-06
 ==========
