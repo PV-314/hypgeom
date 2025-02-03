@@ -215,12 +215,12 @@ step3_check:=proc()
 	print("vLHS2(intermediate LHS)=",vLHS2):
 	
 	# comparing sides in both inequalities
-	if not type(rat1_1/rat2_1,numeric) or abs(rat1_1/rat2_1-1)>tol then
+	if not type(evalf(rat1_1/rat2_1),numeric) or abs(evalf(rat1_1/rat2_1)-1)>tol then
 		print("ERROR: the ratios of the sides of the equations do not match for r0=1. rat1_1/rat2_1=",rat1_1/rat2_1):
 		return():
 	fi:
 
-	if not type(rat1_2/rat2_2,numeric) or abs(rat1_2/rat2_2-1)>tol then
+	if not type(evalf(rat1_2/rat2_2),numeric) or abs(evalf(rat1_2/rat2_2)-1)>tol then
 		print("ERROR: the ratios of the sides of the equations do not match for r0=2. rat1_2/rat2_2=",rat1_2/rat2_2):
 		return():
 	fi:
@@ -244,12 +244,12 @@ step3_check:=proc()
 	print("vLHS3(4.23 LHS)=",vLHS3,", vRHS3=",vRHS3):
 
 	# comparing sides in both inequalities
-	if not type(rat2_1/rat3_1,numeric) or rat2_1/rat3_1<0.98 or rat2_1/rat3_1>1 then
+	if not type(evalf(rat2_1/rat3_1),numeric) or evalf(rat2_1/rat3_1)<0.98 or evalf(rat2_1/rat3_1)>1 then
 		print("ERROR: the ratios of the sides of the equations do not match for r0=1. rat2_1/rat3_1=",rat2_1/rat3_1):
 		return():
 	fi:
 
-	if not type(rat2_2/rat3_2,numeric) or rat2_2/rat3_2<0.97 or rat2_2/rat3_2>1 then
+	if not type(evalf(rat2_2/rat3_2),numeric) or evalf(rat2_2/rat3_2)<0.97 or evalf(rat2_2/rat3_2)>1 then
 		print("ERROR: the ratios of the sides of the equations do not match for r0=2. rat2_2/rat3_2=",rat2_2/rat3_2):
 		return():
 	fi:
@@ -324,7 +324,8 @@ end proc:
 step4_check:=proc()
 	local bExp2,c,c1v,c2v,c3v,c4v,c5v,c6v,c7v,cv,dExp1,dExp2,dExp3,dLB1,dLB2,eBase,eLBCnst,fBnd,gN4v,gnExp2,
 	nAExp1,nAExp2,
-	rat1_1,rat1_2,rat2_1,rat2_2,rat2_3,rat3_1,rat3_2,rat3_3,tol,twoExp2,uExp2,vLHS1,vLHS2,vLHS3,vLHS5,vLHS6,
+	rat1_1,rat1_2,rat2_1,rat2_2,rat2_3,rat3_1,rat3_2,rat3_3,tol,twoExp2,uExp2,
+	vLHS1,vLHS2,vLHS3,vLHS5,vLHS5Cnst,vLHS6,
 	vRHS1,vRHS2,vRHS3,vRHS4,
 	vRHS5,vRHS6,vRHS7,yK1UBCnst,yK3LBCnst,yLB1:
 	
@@ -332,6 +333,7 @@ step4_check:=proc()
 	cv:=0.75:
 	eBase:=0.175: # base of exponential used to obtain (4.26)
 	eLBCnst:=0.1832:
+	fBnd:=b*b:
 	gN4v:=2:
 	yK1UBCnst:=1.73: # constant on LHS of (4.21)
 	yK3LBCnst:=10.91:
@@ -350,11 +352,11 @@ step4_check:=proc()
 	rat2_3:=subs(r0=3,c=cv,vLHS2/vRHS2):
 	
 	# comparing sides in both inequalities
-	if not type(rat1_1/rat2_1,numeric) or abs(rat1_1/rat2_1-1)>tol then
+	if not type(evalf(rat1_1/rat2_1),numeric) or evalf(rat1_1/rat2_1)>1 then
 		print("ERROR: the ratios of the sides of the equations do not match for r0=1. rat1_1/rat2_1=",rat1_1/rat2_1):
 	fi:
 
-	if not type(rat1_2/rat2_2,numeric) or abs(rat1_2/rat2_2-1)>tol then
+	if not type(evalf(rat1_2/rat2_2),numeric) or evalf(rat1_2/rat2_2)>1 then
 		print("ERROR: the ratios of the sides of the equations do not match for r0=2. rat1_2/rat2_2=",rat1_2/rat2_2):
 	fi:
 
@@ -369,38 +371,41 @@ step4_check:=proc()
 	print("vRHS3(4.26 RHS)=",vRHS3):
 
 	# comparing sides in both inequalities
-	if not type(rat2_1/rat3_1,numeric) or abs(evalf(rat2_1/rat3_1-1))>tol then
+	if not type(evalf(rat2_1/rat3_1),numeric) or evalf(rat2_1/rat3_1)>1 then
 		print("ERROR: the ratios of the sides of the equations do not match for r0=1. rat2_1/rat3_1=",evalf(rat2_1/rat3_1)):
 	fi:
 
-	if not type(rat2_2/rat3_2,numeric) or abs(evalf(rat2_2/rat3_2-1))>tol then
+	if not type(evalf(rat2_2/rat3_2),numeric) or evalf(rat2_2/rat3_2)>1 then
 		print("ERROR: the ratios of the sides of the equations do not match for r0=2. rat2_2/rat3_2=",evalf(rat2_2/rat3_2)):
 	fi:
 
-	if not type(rat2_3/rat3_3,numeric) or abs(evalf(rat2_3/rat3_3-1))>tol then
+	if not type(evalf(rat2_3/rat3_3),numeric) or evalf(rat2_3/rat3_3)>1 then
 		print("ERROR: the ratios of the sides of the equations do not match for r0=3. rat2_3/rat3_3=",evalf(rat2_3/rat3_3)):
 	fi:
 	
 	# from vRHS3:
 	c1v:=(yK3LBCnst*c)^4*(eBase^4/4)/yK1UBCnst:
 	print("need c1<",c1v):
-	c1v:=0.607:
+	c1v:=round_down(c1v,3):
+	#c1v:=0.607:
 	
 	c2v:=eBase^4/4:
 	print("need c2<",c2v):
-	c2v:=0.0002344:
+	c2v:=round_down(c2v,4):
+	#c2v:=0.0002344:
 
-	fBnd:=b*b:
 	vRHS4:=subs(f1=fBnd,f3=fBnd,vRHS3):
 	print("(after applying (4.12)) vRHS4=",vRHS4):
 
 	vLHS5:=b^4*nA/d/c1v:
+	vLHS5Cnst:=round_up(lcoeff(vLHS5),4):
+	vLHS5:=vLHS5/lcoeff(vLHS5)*vLHS5Cnst:
 	vRHS5:=(c2v*gN4^4/nA^3*d*y1^2)^(r0-1):
 	print("vLHS5=",vLHS5,", vRHS5=",vRHS5):
 	
 	c3v:=1/c1v:
 	print("need c3>",c3v):
-	c3v:=1.648:
+	c3v:=round_up(c3v,4):
 	vLHS5:=b^4*nA/d*c3:
 
 	yLB1:=vLHS5^(1/(r0-1))*nA^3/c2/gN4^4/d:

@@ -58,9 +58,6 @@ do_d_u_work(b,d,t,u,dbg=0)={
 	c2=0; \\ c for count
 	e=(t+u*sqrt(d))/2;
 	dBnd=get_dBnd(b,u);
-	\\if(dbg!=0 && d==1153,printf("d=%6d, t=%6d, u=%4d, dBnd=%6d, c1=%4d, c2=%4d\n",d,t,u,dBnd,c1,c2));
-	if(dbg!=0 && t==2,print("for d=",d,", t=",t,", u=",u,", dBnd=",dBnd));
-	if(dbg!=0 && t==18,print("for t=18, dBnd=",dBnd));
 	if(d<=dBnd,
 		aLB=get_aLB(b,d,u);
 		aUB=sqrt(d*b4);
@@ -87,7 +84,7 @@ do_a_b_d_t_u_work(a,b,d,nrmA,t,u,dbg=0)={
 	dBndR01=get_dBnd_r0_1_with_a_and_d(a,b,d,u);
 	\\ from equation (4.17) (just before (C-3a)
 	yM1Step1UB=0.19*(b*b*abs(nrmA))^(13.0/11)/d^(12.0/11);
-	\\ from equation (4.18) (just before (AS-4a)
+	\\ from equation (4.19) (just before (C-4a)
 	yM1Step2UB=(abs(nrmA)/d)^(7.0/6)*b^(8.0/3)/10.0;
 	yPrev=b*b;
 	yCurr=(b*b*(t*t+d*u*u)+2*a*t*u)/4;
@@ -138,6 +135,7 @@ do_a_b_d_t_u_work(a,b,d,nrmA,t,u,dbg=0)={
 			isChecked=1;
 		);
 	);
+
 	if(isChecked==0 && d>dBndR01,
 		ykLB=4*sqrt(abs(nrmA)/d);
 		ykUB=84*b*b*sqrt(abs(nrmA)^5/d);
@@ -181,7 +179,7 @@ do_a_b_d_t_u_work(a,b,d,nrmA,t,u,dbg=0)={
 	return(c2);
 }
 
-\\ pulled out of function above
+\\ pulled out of function above, using the N_a-based bounds
 \\ 10 Dec 2024
 get_aLB(b,d,u)={
 	my(a2LB,aLB,b4);
@@ -205,7 +203,7 @@ get_aLB(b,d,u)={
 		aLB=floor(sqrt(a2LB));
 	);
 
-	\\ from r_0>1, p/q=stuff, (AS-6a):
+	\\ from r_0>1, p/q=stuff, (C-6a):
 	a2LB=d*b4-(d*d*u*u*u*u/900/b4);
 	if(a2LB>aLB*aLB,
 		aLB=floor(sqrt(a2LB));
@@ -219,9 +217,9 @@ get_dBnd(b,u,dbg=0)={
 	my(b4,dBnd,dBndTemp,ineqUsed);
 	
 	b4=b*b*b*b;
-	dBnd=(1600.0*b4/u^8)^(1/3); \\ (4.27)
+	dBnd=(1600.0*b4/u^8)^(1/3); \\ (4.28)
 	ineqUsed=1;
-	dBndTemp=sqrt(10)*b^2/u^2; \\ (4.28)
+	dBndTemp=sqrt(10)*b^2/u^2; \\ (4.29)
 	if(dBndTemp>dBnd,
 		dBnd=max(dBnd,dBndTemp);
 		ineqUsed=2;
@@ -236,7 +234,7 @@ get_dBnd(b,u,dbg=0)={
 		dBnd=max(dBnd,dBndTemp);
 		ineqUsed=4;
 	);
-	dBndTemp=148.0*b^6/u^(24/7);
+	dBndTemp=148.0*b^(36/7)/u^(24/7);
 	if(dBndTemp>dBnd,
 		dBnd=max(dBnd,dBndTemp);
 		ineqUsed=5;
