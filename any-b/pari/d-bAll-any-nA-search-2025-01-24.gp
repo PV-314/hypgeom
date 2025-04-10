@@ -1,12 +1,10 @@
-read("..\..\general\hypg-utils.gp");
+read("..\\..\\general\\hypg-utils.gp");
 
-\\ use this function
 \\ output values of d (and the associated Magma commands) for all the values
 \\ outstanding from the proof of the different values of r_0
 
-\\ 23 Sept 2024
-d_searchSqr(b,uLB=1,dbg=0)={
-	my(c,d,dUB,dUB1,dUB2,starttime,tLB,tMod,tUB,uStarttime,uUB);
+d_search(b,uLB=1,dbg=0)={
+	my(c,d,dUB,dUB1,dUB2,starttime,tMod,tUB,uStarttime,uUB);
 
 	c=[0,0];
 	uUB=21;
@@ -27,48 +25,43 @@ d_searchSqr(b,uLB=1,dbg=0)={
 		tMod=floor(tUB/100);
 		tMod=max(100,tMod);
 		if(dbg!=0,print("for b=",b,", u=",u,", tUB=",tUB));
-		tLB=1;
-		\\if(u==1,
-		\\	tLB=133308;
-		\\);
-		for(t=tLB,tUB,
+		for(t=1,tUB,
 			if(dbg!=0,print("for u=",u,", starting t=",t));
 			d=t*t+4;
 			if(d%(u*u)==0,
 				d=d/u/u;
 				c=c+do_d_u_work(b,d,t,u,dbg);
 			);
-			\\if(dbg!=0 && d%2000==0,printf("d=%11d, c1=%8d, c2=%6d, total time=%8d(ms)=%s\n",d,c[1],c[2],getwalltime()-starttime,strtime(getwalltime()-starttime)));
+			if(dbg!=0 && d%2000==0,printf("d=%10d, c1=%8d, c2=%6d, total time=%8d(ms)=%s\n",d,c[1],c[2],getwalltime()-starttime,strtime(getwalltime()-starttime)));
 			d=t*t-4;
 			if(d>0 && d%(u*u)==0,
 				d=d/u/u;
 				c=c+do_d_u_work(b,d,t,u,dbg);
 			);
-			if(t%tMod==0,printf("b=%2d, t=%6d (u=%3d is %5.2f percent done), d=%11d, c1=%8d, c2=%6d, total time=%8d(ms)=%s\n",b,t,u,(100.0*t/tUB),floor((t*t+4)/u/u),c[1],c[2],getwalltime()-starttime,strtime(getwalltime()-starttime)));
+			if(t%tMod==0,printf("b=%2d, t=%6d (u=%3d is %5.2f percent done), d=%10d, c1=%8d, c2=%6d, total time=%8d(ms)=%s\n",b,t,u,(100.0*t/tUB),floor((t*t+4)/u/u),c[1],c[2],getwalltime()-starttime,strtime(getwalltime()-starttime)));
 		);
 		print("done b=",b,", u=",u,": total found ",c," equations. uTime=",(getwalltime()-uStarttime),"=",strtime(getwalltime()-uStarttime),". totalTime=",(getwalltime()-starttime),"=",strtime(getwalltime()-starttime));
 	);
 }
 
 \\ returns [c1,c2], where
-\\ c1=the number of values, a, found with -N_a=db^4-a^2 a perfect square for b and d (for logging)
+\\ c1=the number of values, a, found with N_a=a^2-db^4<0 for b and d (for logging)
 \\ c2=the number of equations to try in Magma
-\\ 24 Sept 2024
 do_d_u_work(b,d,t,u,dbg=0)={
-	my(aLB,aUB,b4,c1,c2,dBnd,e,nrmA);
+	my(aLB,aUB,b4,c1,c2,dBnd,dBndR01,e,nrmA);
 
 	b4=b*b*b*b;
 	c1=0; \\ c for count
 	c2=0; \\ c for count
 	e=(t+u*sqrt(d))/2;
-	dBnd=get_dBnd(b,u,dbg);
+	dBnd=get_dBnd(b,u);
+	dBndR01=get_dBnd_r0_1(b,u);
 	if(d<=dBnd,
-		aLB=get_aLB(b,d,u,dbg);
-		aUB=sqrt(d*b4);
-		if(dbg!=0 && d%100==0,printf("d=%6d, aLB=%6d, aUB=%6d\n",d,aLB,aUB));
+		aLB=get_aLB(b,d,u);
+		aUB=sqrt(d*b*b*b*b);
 		for(a=aLB,aUB,
 			nrmA=a*a-d*b4;
-			if(nrmA<0 && issquare(-nrmA),
+			if(nrmA<0,
 				c1=c1+1;
 				c2=c2+do_a_b_d_t_u_work(a,b,d,nrmA,t,u,dbg);
 			);
@@ -80,17 +73,18 @@ do_d_u_work(b,d,t,u,dbg=0)={
 
 \\ returns 1 if further checking of the sequence associated with the arguments to function is needed
 \\ returns 0 otherwise
-\\ pulled out on 24 Jan 2025
+\\ pulled out (from 9 Dec 2024 version) and reinstated on 17 Jan 2025
 do_a_b_d_t_u_work(a,b,d,nrmA,t,u,dbg=0)={
 	my(bigK,c2,dBndR01,isChecked,k,yCurr,ykLB,ykUB,yM1Step1UB,yM1Step2UB,yPrev,yT);
 	
 	c2=0;
 	isChecked=0;
 	dBndR01=get_dBnd_r0_1_with_a_and_d(a,b,d,u);
-	\\ from equation (4.17) (just before (C-3a)
-	yM1Step1UB=0.19*(b*b*abs(nrmA))^(13.0/11)/d^(12.0/11);
-	\\ from equation (4.19) (just before (C-4a)
-	yM1Step2UB=(abs(nrmA)/d)^(7.0/6)*b^(8.0/3)/10.0;
+
+	\\ from equation (4.13) (just before (AS-3a)
+	yM1Step1UB=2.7*(b*abs(nrmA))^(20.0/11)/d^(42.0/55);
+	\\ from equation (4.15) (just before (AS-4a)
+	yM1Step2UB=1.234*abs(nrmA)^(24.0/13)*b^(28.0/13)/d^(10.0/13);
 	yPrev=b*b;
 	yCurr=(b*b*(t*t+d*u*u)+2*a*t*u)/4;
 	for(k=2,6,
@@ -122,7 +116,7 @@ do_a_b_d_t_u_work(a,b,d,nrmA,t,u,dbg=0)={
 		yCurr=(b*b*(t*t+d*u*u)-2*a*t*u)/4;
 		k=-1;
 		bigK=0;
-		while(bigK==0 || k>bigK-1,
+		while(bigK==0 || k>bigK-2,
 			if(bigK==0 && yCurr>b*b,
 				bigK=k;
 			);
@@ -143,12 +137,12 @@ do_a_b_d_t_u_work(a,b,d,nrmA,t,u,dbg=0)={
 
 	if(isChecked==0 && d>dBndR01,
 		ykLB=4*sqrt(abs(nrmA)/d);
-		ykUB=84*b*b*sqrt(abs(nrmA)^5/d);
+		ykUB=1350*b*b*sqrt(abs(nrmA)^7/d);
 		yPrev=b*b;
 		yCurr=(b*b*(t*t+d*u*u)+2*a*t*u)/4;
 		k=1;
 		while(yCurr<ykUB,
-			\\ recall that m_1 \geq 2 for the positively-indexed elements
+			\\ recall that m_1 \geq 3 for the positively-indexed elements
 			if(k>2 && issquare(yCurr) && yCurr>ykLB,
 				printf("adding r0>1, d=%8d, dBndR01=%9.6e, a=%6d, b=%3d, t=%6d, u=%3d, k=%2d, yCurr=%8d\n",d,dBndR01,a,b,t,u,k,yCurr);
 				isChecked=1;
@@ -166,8 +160,8 @@ do_a_b_d_t_u_work(a,b,d,nrmA,t,u,dbg=0)={
 			if(bigK==0 && yCurr>b*b,
 				bigK=k;
 			);
-			\\ recall that m_1 \leq K-1 for the negatively-indexed elements
-			if(bigK!=0 && k<bigK && issquare(yCurr) && yCurr>ykLB,
+			\\ recall that m_1 \leq K-2 for the negatively-indexed elements
+			if(bigK!=0 && k<bigK-1 && issquare(yCurr) && yCurr>ykLB,
 				printf("adding r0>1, d=%8d, dBndR01=%9.6e, a=%6d, b=%3d, t=%6d, u=%3d, K=%2d, k=%2d, yCurr=%8d\n",d,dBndR01,a,b,t,u,bigK,k,yCurr);
 				isChecked=1;
 			);
@@ -184,32 +178,38 @@ do_a_b_d_t_u_work(a,b,d,nrmA,t,u,dbg=0)={
 	return(c2);
 }
 
-\\ pulled out of function above, using the N_a-based bounds
+\\ pulled out of function above
 \\ 10 Dec 2024
 get_aLB(b,d,u)={
-	my(a2LB,aLB,b4);
+	my(a2LB,aLB);
 	
-	b4=b*b*b*b;
 	aLB=1;
-	\\ from r_0=1, p/q \neq stuff, (C-3a):
-	a2LB=d*b4-sqrt((d/1.36)^23*u^44/b^48);
-	if(a2LB>1,
-		aLB=floor(sqrt(a2LB));
-	);
-	\\ from r_0=1, p/q=stuff, (C-4a):
-	a2LB=d*b4-d^13*u^24/b^28;
+	\\ from (4.28) - the second term in the max in the gap principle lemma
+	a2LB=d*b^4-(3*d^4*u^6/320/b^6)^(1/3);
 	if(a2LB>aLB*aLB,
 		aLB=floor(sqrt(a2LB));
 	);
 
-	\\ from r_0>1, p/q \neq stuff, (C-5a):
-	a2LB=d*b4-sqrt(sqrt((d/28)^11*u^24/b^20));
+	\\ from r_0=1, p/q \neq stuff, (AS-3a):
+	a2LB=d*b^4-(d^152*u^330/4.6^152/b^210)^(1/45);
 	if(a2LB>aLB*aLB,
 		aLB=floor(sqrt(a2LB));
 	);
 
-	\\ from r_0>1, p/q=stuff, (C-6a):
-	a2LB=d*b4-(d*d*u*u*u*u/900/b4);
+	\\ from r_0=1, p/q=stuff, (AS-4a):
+	a2LB=d*b^4-(d^36*u^78/3.45^36/b^54)^(1/11);
+	if(a2LB>aLB*aLB,
+		aLB=floor(sqrt(a2LB));
+	);
+
+	\\ from r_0>1, p/q \neq stuff, (AS-5a):
+	a2LB=d*b^4-(d^17*u^36/15^17/b^20)^(1/8);
+	if(a2LB>aLB*aLB,
+		aLB=floor(sqrt(a2LB));
+	);
+
+	\\ from r_0>1, p/q=stuff, (AS-6a):
+	a2LB=d*b^4-sqrt(d^3*u^6/14^3/b^4);
 	if(a2LB>aLB*aLB,
 		aLB=floor(sqrt(a2LB));
 	);
@@ -217,34 +217,34 @@ get_aLB(b,d,u)={
 }
 
 \\ adding logging to log which inequality is used to get the max
-\\ 23 Sept 2024
+\\ 25 Oct 2024
 get_dBnd(b,u,dbg=0)={
 	my(b4,dBnd,dBndTemp,ineqUsed);
 	
 	b4=b*b*b*b;
-	dBnd=(1600.0*b4/u^8)^(1/3); \\ (4.28)
+	dBnd=(10000.0*b4/u^12)^(1/5); \\ (4.28)
 	ineqUsed=1;
-	dBndTemp=sqrt(10)*b^2/u^2; \\ (4.29)
+	dBndTemp=9.48*b^18/u^6; \\ (4.30) 1/60 value
 	if(dBndTemp>dBnd,
 		dBnd=max(dBnd,dBndTemp);
 		ineqUsed=2;
 	);
-	dBndTemp=1.41*(b^56/u^44)^(1/21);
+	dBndTemp=8.74*b^(390.0/107)/u^(330.0/107); \\ (AS-3b)
 	if(dBndTemp>dBnd,
 		dBnd=max(dBnd,dBndTemp);
 		ineqUsed=3;
 	);
-	dBndTemp=b^(8/3)/u^2;
+	dBndTemp=5.95*b^(98.0/25)/u^(78.0/25); \\ (AS-4b)
 	if(dBndTemp>dBnd,
 		dBnd=max(dBnd,dBndTemp);
 		ineqUsed=4;
 	);
-	dBndTemp=148.0*b^(36/7)/u^(24/7);
+	dBndTemp=167.0*(b^52/u^36)^(1/9); \\ (AS-5b)
 	if(dBndTemp>dBnd,
 		dBnd=max(dBnd,dBndTemp);
 		ineqUsed=5;
 	);
-	dBndTemp=210.0*b^8/u^4;
+	dBndTemp=3375.0*(b*b/u)^6; \\ (AS-6b)
 	if(dBndTemp>dBnd,
 		dBnd=max(dBnd,dBndTemp);
 		ineqUsed=6;
@@ -257,14 +257,30 @@ get_dBnd(b,u,dbg=0)={
 
 \\ the lower bound for d when r_0=1
 \\ including the initial assumptions
-\\ 6 Oct 2024
+\\ 25 Oct 2024
 get_dBnd_r0_1(b,u)={
 	my(b4,dBnd);
 	
 	b4=b*b*b*b;
-	dBnd=(1600.0*b4/u^8)^(1/3); \\ (4.27)
-	dBnd=max(dBnd,sqrt(10)*b^2/u^2); \\ (4.28)
-	dBnd=max(dBnd,1.41*(b^56/u^44)^(1/21)); \\ (C-3a)
-	dBnd=max(dBnd,b^(8/3)/u^2); \\ (C-4a)
+	dBnd=(10000.0*b4/u^12)^(1/5); \\ (4.27)
+	dBnd=max(dBnd,((320/3)*b^18/u^6)); \\ (4.29)
+	dBnd=max(dBnd,8.74*b^(390.0/107)/u^(330.0/107)); \\ (AS-3b)
+	dBnd=max(dBnd,5.95*b^(98.0/25)/u^(78.0/25)); \\ (AS-4b)
+	return(dBnd);
+}
+
+\\ the lower bound for d when r_0=1
+\\ including the initial assumptions
+\\ 25 Oct 2024
+get_dBnd_r0_1_with_a_and_d(a,b,d,u)={
+	my(absNrmA,b4,dBnd);
+	
+	b4=b*b*b*b;
+	absNrmA=d*b4-a*a;
+	dBnd=(10000.0*b4/u^12)^(1/5); \\ (4.27)
+	dBnd=max(dBnd,3.22*absNrmA^(3/4)*b^(3/2)/u^(3/2)); \\ (4.28) 1/60 value
+
+	dBnd=max(dBnd,4.6*absNrmA^(45.0/152)*b^(105.0/76)/u^(165.0/76)); \\ (AS-3a)
+	dBnd=max(dBnd,3.45*absNrmA^(11.0/36)*b^(3/2)/u^(13.0/6)); \\ (AS-4a)
 	return(dBnd);
 }
