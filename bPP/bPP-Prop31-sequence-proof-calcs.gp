@@ -58,8 +58,8 @@ bPP_check()={
 	);
 	c3=pRts[1]; \\ notation c3 is from Lemma 3.6(b) (lemma to prove gap principle)
 	omega14UB=c3; \\ (2/y2LB/y2LB)^(1/4);
-	omega14UB=round_up(omega14UB,4);
-	printf("omega14 approximation UB=%8.6f (like eqn (3.31)\n",omega14UB);
+	omega14UB=round_up(omega14UB,3);
+	printf("omega14 approximation UB=%8.6f (like eqn (3.31) in [11])\n",omega14UB);
 	c1=omega14UB;
 	c2=(2-c1*c1)*sqrt(4-c1*c1); \\ from Lemma 3.6(a)
 	\\ 3 place in c2 gives 76.3 as the final constant in step 4:
@@ -187,43 +187,43 @@ bPP_check()={
 
 	step4LBCnsta=step4LBCnst^4*bnd2^4*cAct^4/step2UBConst/4;
 	step4LBCnsta=round_down(step4LBCnsta,4);
-	printf("step4LBCnsta=    %8.6f\n",step4LBCnsta);
+	printf("step 4 eqn (3.20) RHS const 1=         %8.6f\n",step4LBCnsta);
 
 	step4LBCnstb=step4LBCnst^4/4;
 	step4LBCnstb=round_down(step4LBCnstb,4);
-	printf("step4LBCnstb=    %10.8f\n",step4LBCnstb);
+	printf("step 4 eqn (3.20) RHS const 2=         %10.8f\n",step4LBCnstb);
 
 	step4LBEvenCnsta=step4LBCnsta/(fkEven*flEven)^2;
 	step4LBEvenCnsta=round_down(step4LBEvenCnsta,2);
-	printf("step4LBEvenCnsta=%8.6f\n",step4LBEvenCnsta);
+	printf("step 4 eqn (3.21) RHS const 1=         %8.6f\n",step4LBEvenCnsta);
 
 	step4LBEvenCnstb=step4LBCnstb*gNd4Even^4;
 	step4LBEvenCnstb=round_down(step4LBEvenCnstb,2);
-	printf("step4LBEvenCnstb=%8.6f\n",step4LBEvenCnstb);
+	printf("step 4 eqn (3.21) RHS const 2=         %8.6f\n",step4LBEvenCnstb);
 
 	step4LBEvenCnstb=step4LBEvenCnsta*step4LBEvenCnstb;
 	step4LBEvenCnstb=round_down(step4LBEvenCnstb,2);
-	printf("step4LBEvenCnstb=%8.6f\n",step4LBEvenCnstb);
+	printf("step 4 eqn (3.21) line 2, RHS const 1= %8.6f\n",step4LBEvenCnstb);
 
 	step4LBEvenCnstb=step4LBEvenCnstb/y1LBEvenDenom^2;
 	step4LBEvenCnstb=round_down(step4LBEvenCnstb,3);
-	printf("step4LBEvenCnstb=%8.6e\n",step4LBEvenCnstb);
+	printf("step 4 eqn (3.21) line 2, RHS const 2= %8.6e\n",step4LBEvenCnstb);
 
 	step4LBOddCnsta=step4LBCnsta/(fk*fl)^2;
 	step4LBOddCnsta=round_down(step4LBOddCnsta,2);
-	printf("step4LBOddCnsta= %8.6f\n",step4LBOddCnsta);
+	printf("step 4 eqn (3.23) line 1, RHS const 1= %8.6f\n",step4LBOddCnsta);
 
 	step4LBOddCnstb=step4LBCnstb*gNd4Odd^4;
 	step4LBOddCnstb=round_down(step4LBOddCnstb,2);
-	printf("step4LBOddCnstb= %8.6f\n",step4LBOddCnstb);
+	printf("step 4 eqn (3.23) line 1, RHS const 2= %8.6f\n",step4LBOddCnstb);
 
 	step4LBOddCnstb=step4LBOddCnsta*step4LBOddCnstb;
 	step4LBOddCnstb=round_down(step4LBOddCnstb,2);
-	printf("step4LBOddCnstb= %10.8f\n",step4LBOddCnstb);
+	printf("step 4 eqn (3.23) line 2, RHS const 1= %10.8f\n",step4LBOddCnstb);
 
 	step4LBOddCnstb=step4LBOddCnstb/y1LBOddDenom^2;
 	step4LBOddCnstb=round_down(step4LBOddCnstb,3);
-	printf("step4LBOddCnstb= %8.6e\n",step4LBOddCnstb);
+	printf("step 4 eqn (3.23) line 2, RHS const 2= %8.6e\n",step4LBOddCnstb);
 
 	print("\nLarge y_k: Subsection 3.8");
 	step5YLBCnst=1800; \\ from (3.20)
@@ -251,7 +251,7 @@ bPP_check()={
 	
 	step5DioLBCnsta=c2*(1-cAct)/k0;
 	step5DioLBCnsta=round_down(step5DioLBCnsta,3);
-	printf("diophantine constant(1)=%8.6f\n",step5DioLBCnsta);
+	printf("displayed after eqn (3.26) constant=%8.6f\n",step5DioLBCnsta);
 
 	step5DioLBCnstb=step5DioLBCnsta/qeUBConstc^3/qR0UBConsta^3;
 	step5DioLBCnstb=round_down(step5DioLBCnstb,2);
