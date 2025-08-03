@@ -1,4 +1,3 @@
-
 # this file contains one function for each of the four main steps of the proof:
 # step1_check() for r0=1, p/q \neq p_r0/q_r0*zeta_4
 # step2_check() for r0=1, p/q = p_r0/q_r0*zeta_4
@@ -13,13 +12,13 @@ step1_check:=proc()
 	#tol:=0.0001:
 	
 	fKfEll:=1: # max "constant" value in Prop 3.1. So here it is 1 because f_k*f_ell \leq b^4
-	c:=0.75:
-	d4:=exp(1.68): # from Lemma 2.3(a)
-	gNd4Min:=2: # min value of |g|\cN_{d',4} from (3.36) in Lemma 3.11
-	k0:=0.89: # from (2.8) near the end of Section 2
+	c:=0.75: # the c used throughout Section 4
+	d4:=exp(1.68): # from Lemma 2.3(a) in the JNT 2024 paper
+	gNd4Min:=2: # min value of |g|\cN_{d',4} from (3.5) in Lemma 3.5
+	k0:=0.89: # from (2.6) near the end of Section 2
 	gpLB:=57.32: # constant in the gap principle when -N_alpha is a square
-	y1LB:=4: #=2^2 is the value with no assumptions like (4.1) on Y_1
-	y1LBCnst:=10: # the constant in the denominator of the lower bound for y_{k1}
+	y1LB:=4: # can use 5^2 as at start of Section 4.1 that b \geq 5. But use 4 to be consistent with JNT 2024 inequalities
+	y1LBCnst:=0.99/4: # the constant in the lower bound for y_{k1} (see equation (4.16))
 
 	c0:=2/y1LB: # c0 in the current gap principle proof
 	c0:=round_up(c0,1):
@@ -31,13 +30,13 @@ step1_check:=proc()
 		return():
 	end if:
 
-	c3:=pRts[1]: # notation c3 is from Lemma 3.6(b) (lemma to prove gap principle)
+	c3:=pRts[1]: # notation c3 is from Lemma 3.6(b) (lemma in b=1 -N_a square paper (JNT 2024) to prove gap principle)
 	omega14UB:=c3: # (2/y2LB/y2LB)^(1/4):
 	omega14UB:=round_up(omega14UB,3):
-	printf("omega14 approximation UB=%8.6f (like eqn (3.31)\n",omega14UB):
+	printf("omega14 approximation UB=%8.6f (like eqn (3.31) of JNT 2024)\n",omega14UB):
 	c1:=omega14UB: # 0.16
-	c2:=(2-c1*c1)*sqrt(4-c1*c1): # from Lemma 3.6(a)
-	# 3 place in c2 gives 76.3 as the final constant in step 4:
+	c2:=(2-c1*c1)*sqrt(4-c1*c1): # from Lemma 3.6(a) of JNT 2024
+	# 3 places in c2 gives 76.3 as the final constant in step 4:
 	c2:=round_down(c2,4):
 	printf("c1=%8.6f, c2=%10.8f\n",c1,c2):
 
@@ -51,20 +50,20 @@ step1_check:=proc()
 	printf("v(temp)=%9.6f\n",v):
 	y2UB1Cnst:=2*k0/c2:
 	y2UB1Cnst:=round_up(y2UB1Cnst,2):
-	printf("y_ell^3 UB1Cnst=%9.6f\n",y2UB1Cnst):
+	printf("first constant on LHS of y_{k_3}^3 UB=%9.6f\n",y2UB1Cnst):
 	y2UB2Cnst:=(y2UB1Cnst*v)^4:
 	y2UB2Cnst:=round_up(y2UB2Cnst,3):
-	printf("y_ell^3<%8.6f*(b(1-c))^(-4)*(|N_a|*f_k*f_l)^2*y_k^5\n",y2UB2Cnst):
+	printf("y_{k_3}^3<%8.6f*(b(1-c))^(-4)*(|N_a|*f_k*f_l)^2*y_k^5\n",y2UB2Cnst):
 	y2UB2SqrCnst:=fKfEll^2*y2UB2Cnst:
 	printf("y2UB2SqrCnst=%9.6f\n",y2UB2SqrCnst):
-	printf("y_ell^3<%8.6f*(b/(1-c))^4*|N_a|^2*y_k^5\n",y2UB2SqrCnst):
+	printf("y_{k_3}^3<%8.6f*(b/(1-c))^4*|N_a|^2*y_{k_1}^5\n",y2UB2SqrCnst):
 	
 	cUB1:=(y2UB2SqrCnst*(1-c)^(-4)/gpLB^12)^(1/22):
 	cUB1:=round_up(cUB1,2):
 	nAExp1a:=(2+2*12)/22:
 	bExp1a:=(4+4*12)/22:
 	dExp1a:=(2*12)/22:
-	printf("y_k<%8.6f*|N_a|^(%a)*b^(%a)/d^(%a)\n",cUB1,nAExp1a,bExp1a,dExp1a):
+	printf("y_{k_1}<%8.6f*|N_a|^(%a)*b^(%a)/d^(%a)\n",cUB1,nAExp1a,bExp1a,dExp1a):
 	printf("Theorem 1.3 work for step (i) complete.\n"):
 
 	printf("\nStarting Theorem 1.4 work for step (i).\n"):
@@ -73,37 +72,38 @@ step1_check:=proc()
 	nAExp1b:=nAExp1b/dExp1b:
 	bExp1b:=(2+bExp1a)/dExp1b:
 	uExp1b:=4/dExp1b:
-	dLBCnst1a:=(cUB1*y1LBCnst)^(1/dExp1b):
+	dLBCnst1a:=(cUB1/y1LBCnst)^(1/dExp1b):
 	dLBCnst1a:=round_up(dLBCnst1a,3):
 	printf("d>%8.6f*nA^(%a)*b^(%a)/u^(%a)\n",dLBCnst1a,nAExp1b,bExp1b,uExp1b):
-	printf("Theorem 1.4 work for step (i) complete.\n"):
+	printf("Theorem 1.4(b) work for step (i) complete.\n"):
 
-	printf("lower bound for d in terms of b and u.\n"):
+	printf("\nlower bound for d in terms of b and u.\n"):
 	dExp1b:=nAExp1b:
 	bExp1b:=bExp1b+4*dExp1b:
 	printf("d>%8.6f*d^(%a)*b^(%a)/u^(%a)\n",dLBCnst1a,dExp1b,bExp1b,uExp1b):
 	dExp1b:=1-dExp1b:
 	dLBCnst1b:=dLBCnst1a^(1/dExp1b):
-	dLBCnst1b:=round_up(dLBCnst1b,3):
+	dLBCnst1b:=round_up(dLBCnst1b,2):
 	bExp1b:=bExp1b*(1/dExp1b):
 	uExp1b:=uExp1b*(1/dExp1b):
 	printf("d>%8.6f*b^(%a)/u^(%a)\n",dLBCnst1b,bExp1b,uExp1b):
-	printf("Theorem 1.4 work for step (i) complete.\n"):
+	printf("Theorem 1.4(a) work for step (i) complete.\n"):
 end proc:
 
 step2_check:=proc()
 	local bExp2a,bExp2b,bExp2c,dExp2a,dExp2b,dExp2c,gpLB,nAExp2a,nAExp2b,
-	nAExp2c,uExp2c,yk3UBCnst,ykCnst2a,ykCnst2b:
+	nAExp2c,uExp2c,y1LBCnst,yk3UBCnst,ykCnst2a,ykCnst2b,ykCnst2c:
 
 	gpLB:=57.32: # constant in the gap principle when -N_alpha is a square
+	y1LBCnst:=0.99/4: # the constant in the lower bound for y_{k1} (see equation (4.16))
 	yk3UBCnst:=1.73: # from equation (4.15) in the b=1 sqrs paper
 
 	print("Step (ii)"):
 	ykCnst2a:=4*yk3UBCnst/gpLB^4:
 	ykCnst2a:=round_up(ykCnst2a,1):
-	bExp2a:=4*4:
-	dExp2a:=2*4-1:
-	nAExp2a:=2*4-1:
+	bExp2a:=4*4: # from application of gap principle twice
+	dExp2a:=2*4-1: # from application of gap principle twice, then cancel the d on LHS
+	nAExp2a:=2*4-1: # from application of gap principle twice, then cancel the N_a on LHS
 	printf("y_k^6<%8.6f*|N_a|^%a*b^%a/d^%a\n",ykCnst2a,nAExp2a,bExp2a,dExp2a):
 
 	ykCnst2b:=ykCnst2a^(1/6):
@@ -118,22 +118,27 @@ step2_check:=proc()
 	bExp2c:=(bExp2b+2)/(1+dExp2b):
 	nAExp2c:=(nAExp2b-1)/(1+dExp2b):
 	uExp2c:=4/(1+dExp2b):
-	printf("d>|N_a|^(%a)*b^(%a)*u^(%a)\n",nAExp2c,bExp2c,uExp2c):
-	printf("Theorem 1.4 work for step (ii) complete.\n"):
+	ykCnst2c:=(ykCnst2b/y1LBCnst)^(1/(1+dExp2b)):
+	ykCnst2c:=round_up(ykCnst2c,2):
+	printf("d>%8.6f*|N_a|^(%a)*b^(%a)*u^(%a)\n",ykCnst2c,nAExp2c,bExp2c,uExp2c):
+	printf("Theorem 1.4(b) work for step (ii) complete.\n"):
 
-	printf("lower bound for d in terms of b and u.\n"):
+	printf("\nlower bound for d in terms of b and u.\n"):
 	dExp2c:=1-nAExp2c:
 	bExp2c:=(bExp2c+4*nAExp2c)*(1/dExp2c):
 	uExp2c:=uExp2c*(1/dExp2c):
-	printf("d>b^(%a)/u^(%a)\n",bExp2c,uExp2c):
+	ykCnst2c:=ykCnst2c^(1/dExp2c):
+	ykCnst2c:=round_up(ykCnst2c,2):
+	printf("d>%8.6f*b^(%a)/u^(%a)\n",ykCnst2c,bExp2c,uExp2c):
+	printf("Theorem 1.4(a) work for step (ii) complete.\n"):
 end proc:
 
 step3_check:=proc()
 	local bExp1,bExp2,bnd1,c,c0,c1,c2,c2Exp1,c2v,c3,c4_14v,c42,c4v,c5,c5_14v,
-	c5v,c7v,c8,c9a,c9b,
-	d4,dExp,dExp1,dExp2,dLB1,dLB2,eLBCnst,eLBDenom,fBnd,gN4Exp,k0,l0UB,nAExp,nAExp1,omega14UB,p,pRts,qBnd,qLB,qUBCnst,
+	c5v,c6,c7v,c8,c9a,c9b,d4,dExp,dExp1,dExp2,dLB1,dLB2,dLB3,eLBCnst,eLBDenom,fBnd,
+	gN4Exp,gNd4Min,k0,l0UB,nAExp,nAExp1,omega14UB,p,pRts,qBnd,qLB,qUBCnst,
 	rat1_1,rat1_2,rat2_1,rat2_2,rat3_1,rat3_2,thUBCnst,tol,twoExp1,uExp1,uExp2,vLHS1,vLHS2,vLHS3,vLHS4,vLHS5,
-	vRHS1,vRHS2,vRHS3,vRHS5,vRHS6,vRHS7,vRHS8,x1LBCnst,y1LB,y2UB1Cnst,yK3LBCnst:
+	vRHS1,vRHS2,vRHS3,vRHS5,vRHS6,vRHS7,vRHS8,x1LBCnst,y1LB,y1LBCnst,y2UB1Cnst,yK3LBCnst:
 	
 	tol:=0.0001:
 	c:=0.75:
@@ -141,7 +146,8 @@ step3_check:=proc()
 	d4:=exp(1.68): # from Lemma 2.3(a)
 	k0:=0.89: # from (2.8) near the end of Section 2
 	y1LB:=4: #=2^2 is the value with no assumptions like (4.1) on Y_1
-	#gNd4Min:=2: # min value of |g|\cN_{d',4} from (3.36) in Lemma 3.11
+	y1LBCnst:=0.99/4: # the constant in the lower bound for y_{k1} (see equation (4.16))
+	gNd4Min:=2: # min value of |g|\cN_{d',4} from (3.36) in Lemma 3.11
 	thUBCnst:=2.29: # from Lemma 3.8(a)
 
 	# here c0, c1, c2, c3 are notation from gap principle section of initial JNT paper with b=1.
@@ -200,14 +206,14 @@ step3_check:=proc()
 	printf("(y_{k1}*y_{k3})^(1/4)>%8.6f*b*c*sqrt(d)*y_k/sqrt(N_a*f_k*f_l)*(ELB)^(r0-1)\n",bnd1):
 	y2UB1Cnst:=2*k0/c2:
 	y2UB1Cnst:=round_up(y2UB1Cnst,2):
-	printf("y_l^3 UBCnst=%9.6f\n",y2UB1Cnst):
+	printf("first constant in LHS of (4.24)=%9.6f\n",y2UB1Cnst):
 	
 	yK3LBCnst:=bnd1/eLBCnst:
 	yK3LBCnst:=round_down(yK3LBCnst,4):
-	printf("equation (4.23): y_{k3}>(%8.6f/g/Nd4*sqrt(N_a/f_k/f_l))^4*stuff\n",yK3LBCnst):
+	printf("RHS of (4.24)=(%8.6f/g/Nd4*sqrt(N_a/f_k/f_l))^12*stuff\n",yK3LBCnst):
 
-	printf("now apply upper bound for y_{k3}\n"):
-	# equation (4.22)
+	printf("apply upper bound for y_{k3}\n"):
+	# equation (4.24)
 	vLHS1:=(nA*f1*f3)^2*(y2UB1Cnst/b/(1-c))^4*(qUBCnst/gN4)^(4*r0)*d^(2*r0-2)*y1^(4*r0+1):
 	vRHS1:=(yK3LBCnst*b*c*sqrt(nA/f1/f3)/gN4)^12*(eLBCnst*gN4/nA)^(12*r0)*d^(6*r0)*y1^(12*r0-3):
 	rat1_1:=subs(r0=1,vLHS1/vRHS1):
@@ -216,7 +222,7 @@ step3_check:=proc()
 	# an intermediate step between equation (4.24) and the next displayed inequality:
 	c5v:=qUBCnst^2/eLBCnst^6:
 	c5v:=round_up(c5v,3):
-	print("using c5=",c5v):
+	print("constant in ()^(2*r0-1) term on LHS of displayed inequality after (4.24), c5=",c5v):
 	vLHS2:=(nA*f1*f3)^2*nA^6/d^4*(y2UB1Cnst/b/(1-c))^4*(qUBCnst/gN4)^2*(gN4/yK3LBCnst/b/c*sqrt(f1*f3/nA))^12*(1/eLBCnst/gN4)^6*(qUBCnst^2/gN4^2/eLBCnst^6/gN4^6)^(2*r0-1):
 	vRHS2:=(y1^4*d^2/nA^6)^(2*r0-1):
 	rat2_1:=subs(r0=1,vLHS2/vRHS2):
@@ -271,7 +277,7 @@ step3_check:=proc()
 	print("vLHS4(4.26)=",vLHS4):
 
 	vLHS5:=c4*b^16*nA^2*gN4^4/d^4:
-	print("with c4=",c4v,"=",c4_14v,"^4: symbolic (4.24)=",vLHS5):
+	print("with c4=",c4v,"=",c4_14v,"^4: symbolic (4.26)=",vLHS5):
 
 	vRHS5:=simplify(vLHS5^(1/(2*r0-1)),symbolic):
 	vRHS5:=simplify((vRHS5*c5*nA^6/gN4^8/d^2)^(1/4),symbolic):
@@ -285,14 +291,20 @@ step3_check:=proc()
 	printf("Theorem 1.3 work for step (iii) complete.\n"):
 
 	printf("\nStarting Theorem 1.4 work for step (iii).\n"):
+	print("recall that c4=",c4v,"=",c4_14v,"^4"):
+	print("and c5^(1/4)=",c5_14v):
+	
 	dExp1:=(1+2*r0)/(2*r0-1)/2:
-	vRHS6:=vRHS5*d^dExp1/nA/u^4*10*b^2:
-	vRHS6:=simplify(subs(gN4=2,vRHS6),symbolic):
+	vRHS6:=vRHS5*d^dExp1/nA/u^4*b^2/y1LBCnstv:
+	vRHS6:=simplify(subs(gN4=gNd4Min,vRHS6),symbolic):
 	print("d^",(1+dExp1),">",vRHS6):
 
 	dExp2:=simplify(1+dExp1):
 	vRHS7:=simplify(vRHS6^(1/dExp2),symbolic):
-	print("(5.5) d>",vRHS7):
+	print("(5.8) d>",vRHS7):
+	c6:=c5_14v/y1LBCnst:
+	c6:=round_up(c6,4):
+	print("c5_14/y1LBCnst=",c6):
 	
 	nAExp1:=2*r0/(6*r0-1):
 	print("nA exponent at r0=2=",subs(r0=2,nAExp1)):
@@ -303,30 +315,31 @@ step3_check:=proc()
 	uExp1:=8/(6*r0-1)*(2*r0-1):
 	print("u exponent at r0=2=",subs(r0=2,uExp1)):
 	
-	c3:=100^(1/(6*r0-1)*(2*r0-1))*c2^(2/(6*r0-1)*(2*r0-1))*c4_14^(2/(6*r0-1))/4^((-3+4*r0)/(6*r0-1)):
-	c3:=simplify(subs(c4_14=195/1000,c2=592/10,c3),symbolic):
-	print("c3=",c3):
+	#c3:=(1/y1LBCnstv^2)^(1/(6*r0-1)*(2*r0-1))*c2^(2/(6*r0-1)*(2*r0-1))*c4_14^(2/(6*r0-1))/4^((-3+4*r0)/(6*r0-1)):
+	#c3:=simplify(subs(c4_14=195/1000,c2=592/10,c3),symbolic):
+	#print("c3=",c3):
 	
 	c2Exp1:=2*(2*r0-1)/(6*r0-1):
-	print("c2 exponent=",c2Exp1,"=2/3+",simplify(c2Exp1-2/3)):
+	print("(c5^(1/4)/y1LBCnst) exponent=",c2Exp1,"=2/3+",simplify(c2Exp1-2/3)):
 	
 	twoExp1:=2*(4*r0-3)/(6*r0-1):
 	print("2 exponent=",twoExp1,"=4/3+",simplify(twoExp1-4/3)):
 	
-	c7v:=c4_14v^6*2^14/(10*c5_14v)^4:
-	print("c4_14^6*2^14/(10*c5_14)^4=",c7v," ^(1/3/(6*2-1))=",evalf(c7v^(1/3/(6*2-1)))," ^(1/3/(6*3-1))=",evalf(c7v^(1/3/(6*3-1)))):
+	c7v:=c4_14v^6*2^14/c6^4:
+	print("checking the ``lower order'' constant terms: c4_14^6*2^14/(c5_14/y1LBCnst)^4=",c7v," ^(1/3/(6*2-1))=",evalf(c7v^(1/3/(6*2-1)))," ^(1/3/(6*3-1))=",evalf(c7v^(1/3/(6*3-1)))):
 	if c7v>1 then
 		print("BAD: c7v=",c7v," must be less than 1"):
 		return():
 	fi:
 	
-	c8:=evalf((10*c5_14v)^(2/3)/2^(4/3)):
-	print("(10*c5_14^(1/4))^(2/3)/2^(4/3)=",c8):
-	c8:=ceil(c8):
+	c8:=evalf(c6^(2/3)/2^(4/3)):
+	print("the main constant term: (c5_14/y1LBCnst)^(2/3)/2^(4/3)=",c8):
+	c8:=round_up(c8,3):
 	dLB1:=c8*nA^subs(r0=2,nAExp1)*b^subs(r0=2,bExp1)/u^subs(r0=2,uExp1):
 	print("d>",dLB1):
-	printf("Theorem 1.4 work for step (iii) complete.\n"):
+	printf("Theorem 1.4(b) work for step (iii) complete.\n"):
 
+	printf("\nlower bound for d in terms of b and u.\n"):
 	vRHS8:=simplify(subs(nA=d*b^4,vRHS7)):
 	print("d>",vRHS8):
 	dExp2:=2*r0/(6*r0-1):
@@ -335,35 +348,40 @@ step3_check:=proc()
 	dLB2:=simplify(vRHS8^(1/dExp2),symbolic):
 	print("d>",dLB2):
 	
-	c9a:=10*c5_14v/4:
-	c9b:=c4_14v^2*16/(10*c5_14v):
-	printf("c4^(1/4)^2*16/10/c5^(1/4)=%9.6f\n",c9b):
+	c9a:=(1/y1LBCnst)*c5_14v/gNd4Min^2: # main term
+	c9b:=c4_14v^2*gNd4Min^4/c6:
+	printf("c4^(1/4)^2*16/(y1LBCnst)/c5^(1/4)=%9.6f\n",c9b):
 	if abs(c9b)>1 then
 		printf("BAD: |c4^(1/4)^2*16/10/c5^(1/4)|=%9.6f must be less than 1\n",c9b):
 	fi:
-	printf("10*c5^(1/4)/4=%9.6f\n",c9a):
+	printf("main constant term: 1/y1LBCnst*c5^(1/4)/4=%9.6f\n",c9a):
+	c9a:=round_up(c9a,2):
 	bExp2:=4*(1+4*r0)/(4*r0-1):
 	print("b exponent=4+",simplify(bExp2-4)," at r0=2: b exponent=",subs(r0=2,bExp2)):
 
 	uExp2:=8/(4*r0-1)*(2*r0-1):
 	print("u exponent=4+",simplify(uExp2-4)," at r0=2: u exponent",subs(r0=2,uExp2)):
+	dLB3:=c9a*b^subs(r0=2,bExp2)/u^subs(r0=2,uExp2):
+	print("d>",dLB3):
+	printf("Theorem 1.4(a) work for step (iii) complete.\n"):
 end proc:
 
 step4_check:=proc()
-	local bExp2,c,c1v,c2v,c3v,c4v,c5v,c6v,c7v,cv,dExp1,dExp2,dExp3,dLB1,dLB2,eBase,eLBCnst,fBnd,gN4v,gnExp2,
-	nAExp1,nAExp2,
+	local bExp2,c,c1v,c2v,c3v,c4v,c5v,c6v,c7v,c8v,cv,dExp1,dExp2,dExp3,dLB1,dLB2,
+	dLB3,eBase,eLBCnst,fBnd,gN4v,gnExp2,nAExp1,nAExp2,
 	rat1_1,rat1_2,rat2_1,rat2_2,rat2_3,rat3_1,rat3_2,rat3_3,tol,twoExp2,uExp2,
 	vLHS1,vLHS2,vLHS3,vLHS5,vLHS5Cnst,vLHS6,
 	vRHS1,vRHS2,vRHS3,vRHS4,
-	vRHS5,vRHS6,vRHS7,yK1UBCnst,yK3LBCnst,yLB1:
+	vRHS5,vRHS6,vRHS7,y1LBCnst,yK1UBCnst,yK3LBCnst,yLB1:
 	
 	tol:=0.0001:
 	cv:=0.75:
-	eBase:=0.175: # base of exponential used to obtain (4.26)
+	eBase:=0.175: # base of exponential used to obtain (4.26), defined just above (4.28)
 	eLBCnst:=0.1832:
 	fBnd:=b*b:
 	gN4v:=2:
-	yK1UBCnst:=1.73: # constant on LHS of (4.21)
+	y1LBCnst:=0.99/4: # the constant in the lower bound for y_{k1} (see equation (4.16))
+	yK1UBCnst:=1.73: # constant on LHS of (4.20)
 	yK3LBCnst:=10.91:
 	
 	# first inequality in Section 4.5
@@ -372,7 +390,7 @@ step4_check:=proc()
 	rat1_1:=subs(r0=1,c=cv,vLHS1/vRHS1):
 	rat1_2:=subs(r0=2,c=cv,vLHS1/vRHS1):
 	
-	# an intermediate step before (4.26)
+	# an intermediate step before (4.28)
 	vLHS2:=yK1UBCnst*r0^(1/2):
 	vRHS2:=(yK3LBCnst*b*c*sqrt(nA/f1/f3)/gN4)^4*(eLBCnst^4*gN4^4/4/nA^3)^r0*d^r0*y1^(2*r0-2):
 	rat2_1:=subs(r0=1,c=cv,vLHS2/vRHS2):
@@ -388,7 +406,7 @@ step4_check:=proc()
 		print("ERROR: the ratios of the sides of the equations do not match for r0=2. rat1_2/rat2_2=",rat1_2/rat2_2):
 	fi:
 
-	# equation (4.26)
+	# equation (4.28)
 	c:=cv:
 	vLHS3:=1:
 	vRHS3:=(yK3LBCnst*b*c*sqrt(nA/f1/f3)/gN4)^4*(eBase^4*gN4^4/4/nA^3)*d/yK1UBCnst*(eBase^4*gN4^4/4/nA^3*d*y1^2)^(r0-1):
@@ -396,7 +414,7 @@ step4_check:=proc()
 	rat3_2:=subs(r0=2,vLHS3/vRHS3):
 	rat3_3:=subs(r0=3,vLHS3/vRHS3):
 	# print it out again
-	print("vRHS3(4.26 RHS)=",vRHS3):
+	print("vRHS3(4.28 RHS)=",vRHS3):
 
 	# comparing sides in both inequalities
 	if not type(evalf(rat2_1/rat3_1),numeric) or evalf(rat2_1/rat3_1)>1 then
@@ -413,15 +431,17 @@ step4_check:=proc()
 	
 	# from vRHS3:
 	c1v:=(yK3LBCnst*c)^4*(eBase^4/4)/yK1UBCnst:
-	print("need c1<",c1v):
+	print("need c1 (first constant above)<",c1v):
 	c1v:=round_down(c1v,3):
+	#c1v:=0.607:
 	
 	c2v:=eBase^4/4:
-	print("need c2<",c2v):
+	print("need c2 (second constant above, inside ()^(r0-2))<",c2v):
 	c2v:=round_down(c2v,4):
+	#c2v:=0.0002344:
 
 	vRHS4:=subs(f1=fBnd,f3=fBnd,vRHS3):
-	print("(after applying (4.12)) vRHS4=",vRHS4):
+	print("(after applying (4.14)) vRHS4=",vRHS4):
 
 	vLHS5:=b^4*nA/d/c1v:
 	vLHS5Cnst:=round_up(lcoeff(vLHS5),4):
@@ -437,21 +457,26 @@ step4_check:=proc()
 	yLB1:=vLHS5^(1/(r0-1))*nA^3/c2/gN4^4/d:
 	yLB1:=simplify(yLB1^(1/2),symbolic):
 	print("yK1>",yLB1):
+	c4v:=sqrt(1/c2v):
+	printf("sqrt(1/c2) (c4v in what follows)>%9.6f",c4v):
+	c4v:=65.4:
+	printf(". Using %9.6f.\n",c4v):
 	printf("Theorem 1.3 work for step (iv) complete.\n"):
 	
 	printf("\nStarting Theorem 1.4 work for step (iv).\n"):
 	dExp1:=r0/(r0-1)/2: # recall that this is in the denominator
-	print("dExp1=",1/2,"+",simplify(dExp1-1/2)):
+	print("dExp1 (from (4.29))=",1/2,"+",simplify(dExp1-1/2)):
 	nAExp1:=(1/2*(-2+3*r0)/(r0-1)):
-	print("nAExp1=",3/2,"+",simplify(nAExp1-3/2)):
-	c4v:=sqrt(1/c2v):
-	print("c4>",c4v):
-	c4v:=65.4:
+	print("nAExp1 (from (4.29))=",3/2,"+",simplify(nAExp1-3/2)):
 
 	dExp2:=simplify(1+dExp1):
+	print("dExp2=1+dExp1=",dExp2):
 	vLHS6:=d^dExp2:
-	vRHS6:=simplify(yLB1*10*b*b/u^4/nA*d^dExp1,symbolic):
+	vRHS6:=simplify(yLB1*(1/y1LBCnst)*b*b/u^4/nA*d^dExp1,symbolic):
 	print("d^",dExp2,">",vRHS6):
+	c5v:=evalf(c4v/y1LBCnst):
+	c5v:=round_up(c5v,4):
+	printf("here (1/y1LBCnst)=%9.6f x sqrt(1/c2)=%9.6f=%9.6f. Using %9.6f\n",(1.0/y1LBCnst),c4v,(c4v/y1LBCnst),c5v):
 
 	dLB1:=simplify(vRHS6^(1/dExp2),symbolic):
 	print("d>",dLB1):
@@ -468,41 +493,53 @@ step4_check:=proc()
 	uExp2:=8/(-2+3*r0)*(r0-1):
 	print("u exponent=",8/3+simplify(uExp2-8/3),", at r0=2=",subs(r0=2,uExp2)):
 	
-	twoExp2:=(r0-1)/(-2+3*r0):
-	print("(100/c2) exponent=",1/3+simplify(twoExp2-1/3),", at r0=2=",subs(r0=2,twoExp2)):
-	
-	c5v:=evalf((100/c2v/gN4v^4)^(1/3)):
-	c5v:=ceil(c5v):
-	print("constant term in (C-6a)=",c5v):
-	c6v:=evalf(gN4v^4/(100/c2v)):
+	c6v:=evalf((c5v^2/gN4v^4)^(1/3)):
+	c6v:=ceil(c6v):
+	print("constant term in (5.12)=",c6v):
+	c7v:=evalf(c3v*(gN4v^4/c5v^2)^(1/3)):
 	# these parts go to 1 from below as r0 goes to infinity
-	print("remaining constant parts from lower bound for d: c6v=",c6v,", at r0=2, c6v^(1/3/(3r0-2))=",c6v^(1/3/(3*2-2)),", at r0=3, c6v^(1/3/(3r0-2))=",c6v^(1/3/(3*3-2))):
-	if c6v>1 then
-		print("BAD: c6v=",c6v," must be less than 1"):
+	print("remaining constant parts from lower bound for d: c7v=",c7v,", at r0=2, c7v^(1/(3r0-2))=",c7v^(1/(3*2-2)),", at r0=3, c7v^(1/(3r0-2))=",c7v^(1/(3*3-2))):
+	if c7v>1 then
+		print("BAD: c7v=",c7v," must be less than 1"):
 		return():
 	fi:
-	printf("Theorem 1.4 work for step (iv) complete.\n"):
+	dLB2:=c6v*nA^subs(r0=2,nAExp2)*b^subs(r0=2,bExp2)/u^subs(r0=2,uExp2):
+	print("d>",dLB2):
+	printf("Theorem 1.4(b) work for step (iv) complete.\n"):
 
 	# start work to remove N_a	
-	print("d LB using only b and u"):
+	printf("\nlower bound for d in terms of b and u.\n"):
 	vRHS7:=simplify(subs(nA=d*b^4,dLB1),symbolic):
-	print("d>",vRHS7):
+	print("as above with nA=d*b^4: d>",vRHS7):
 	dExp3:=r0/(-2+3*r0):
 	vRHS7:=simplify(vRHS7/d^dExp3,symbolic):
-	dExp3:=simplify(1-dExp3,symbolic):
+	dExp3:=simplify(1-dExp3,symbolic): # 1-r0/(3*r0-2)
 	print("dExp3=",dExp3):
-	dLB2:=simplify(vRHS7^(1/dExp3),symbolic):
-	print("d>",dLB2):
+	dLB3:=simplify(vRHS7^(1/dExp3),symbolic):
+	print("d>",dLB3):
 	
 	bExp2:=4*r0/(r0-1):
 	print("b exponent=4+",simplify(bExp2-4)," at r0=2=",subs(r0=2,bExp2)):
-	c7v:=evalf(10/sqrt(c2v)):
-	print("constant term before (C-6b)=",c7v):
-	c7v:=ceil(c7v):
-	print("constant term after rounding and before (C-6b)=",c7v):
-	c7v:=evalf(c7v/gN4v^2*c3v^(1/2/(2-1))):
-	print("constant term in (C-6b)=",c7v):
+	c8v:=evalf((1/y1LBCnst)*c4v):
+	print("constant term in displayed lower bound for d before (5.13)=",c8v):
+	c8v:=round_up(c8v,4):
+	print("constant term after rounding and before (5.13)=",c8v):
+	c8v:=evalf(c8v/gN4v^2*c3v^(1/2/(2-1))):
+	print("constant term in (5.13)=",c8v):
 	print("compare to dLB1, which yields d>",solve(subs(c2=c2v,c3=c3v,gN4=2,nA=b^4*d,r0=2,dLB1)=d,d)):
+	print("compare to dLB2, which yields d>",solve(subs(c2=c2v,c3=c3v,gN4=2,nA=b^4*d,r0=2,dLB2)=d,d)):
+end proc:
+
+thm_14_consolidation:=proc()
+	local dSoln,dSoln1,dSoln2:
+
+	dSoln:=[solve(4*nA/d^(1/2)=nA*d*u^4/b/b*0.99/4,d)]:
+	dSoln1:=simplify(dSoln[1],symbolic):
+	print("(5.15), dSoln1=",dSoln1):
+
+	dSoln:=[solve(b*b*nA/d=nA*d*u^4/b/b*0.99/4,d)]:
+	dSoln2:=simplify(dSoln[1],symbolic):
+	print("(5.16), dSoln1=",dSoln2):
 end proc:
 
 round_down:=proc(num,places)
