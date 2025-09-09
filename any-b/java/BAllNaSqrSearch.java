@@ -2,19 +2,25 @@ import java.math.BigInteger;
 import java.time.Duration;
 
 /**
- * squares in sequences of the form (a+b*sqrt(d))*((t+u*sqrt(d))/2)^(2*k)
+ * squares in sequences of the form (a+b^2*sqrt(d))*((t+u*sqrt(d))/2)^(2*k)
  * i.e., my y_k's
  */
 public class BAllNaSqrSearch
 {
 	public static void main(String[] args) {
-		long b = 5L;
-		BAllNaSqrSearch app = new BAllNaSqrSearch();
-		app.doBWork(b);
+		if (args!=null && args.length==1) {
+			long b=Long.parseLong(args[0]);
+			BAllNaSqrSearch app = new BAllNaSqrSearch();
+			app.doBWork(b);
+		} else {
+			long b = 13L;
+			BAllNaSqrSearch app = new BAllNaSqrSearch();
+			app.doBWork(b);
+		}
 	}
 
 	private void doBWork(long b) {
-		long uUB = 21L;
+		long uUB = 2L;
 		double dUB = getDBnd(b, uUB+1)[0];
 		while (dUB>1.999) {
 			uUB=uUB+1L;
@@ -88,8 +94,8 @@ public class BAllNaSqrSearch
 	// c1=the number of values, a, found with -N_a=db^4-a^2 a perfect square for b and d (for logging)
 	// c2=the number of equations to try in Magma
 	private long[] doBDTUWork(long b, long d, long t, long u, double dPow11, double dPow13, double dPow23, long b4, double b8, double b20, double b28, double b48, double uPow4, double uPow8, double uPow24, double uPow44) {
-		long c1 = 0;
-		long c2 = 0;
+		long c1 = 0L;
+		long c2 = 0L;
 		double[] dBndInfo = getDBnd(b, u);
 		double dBnd=dBndInfo[0];
 		if (d <= dBnd) {
@@ -108,26 +114,28 @@ public class BAllNaSqrSearch
 		return new long[] {c1,c2};
 	}
 
-	// the y_k's here are 4*y_k in my sequence, so that they are always integers
+	// the y_k's here are 4*y_k in my sequence so that the quantities are integers
 	private long processBigIntegerTuple(long a, long b, long d, long t, long u, double ykUB) {
 		long c2=0;
 		BigInteger v1=BigInteger.valueOf(t*t+d*u*u);
-		BigInteger v1a=v1.divide(BigInteger.valueOf(2L));
+		BigInteger v1a=v1.divide(BigInteger.TWO);
 		BigInteger v2=BigInteger.valueOf(2L*a).multiply(BigInteger.valueOf(t*u));
-		BigInteger b2 = BigInteger.valueOf(b*b);
+		BigInteger bSqr = BigInteger.valueOf(b*b);
 
 		// check positive-indexed elements
-		BigInteger yPrev=BigInteger.valueOf(4L*b*b);
+		BigInteger y0=BigInteger.valueOf(4L*b*b);
+		BigInteger yPrev = y0;
 		long k=1L;
-		BigInteger yCurr=b2.multiply(v1).add(v2);
+		BigInteger yCurr=bSqr.multiply(v1).add(v2);
 		double yCurrD = yCurr.doubleValue();
 		boolean isChecked=false;
 		while (!isChecked && yCurrD<4.0*ykUB) {
 			// recall that m_1 \geq 2 for the positively-indexed elements
-			if (k>1L) {
+			// m_2 \geq 3 for all nrmA code
+			if (k >= 2L) {
 				BigInteger[] sqrtArray = yCurr.sqrtAndRemainder();
 				if (sqrtArray[1].equals(BigInteger.ZERO)) {
-					System.out.printf("adding d=%8d, a=%6d, b=%3d, t=%6d, u=%3d, k=%2d, yCurr=%8d\n",d,a,b,t,u,k,yCurr);
+					System.out.printf("adding d=%8d, a=%6d, b=%3d, t=%6d, u=%3d, k=%2d, 4*yCurr=%8d\n",d,a,b,t,u,k,yCurr);
 					isChecked=true;
 				}
 			}
@@ -135,24 +143,24 @@ public class BAllNaSqrSearch
 			yPrev=yCurr;
 			yCurr=yT;
 			yCurrD=yCurr.doubleValue();
-			k=k+1;
+			k=k+1L;
 		}
 
 		// check negative-indexed elements
 		if (!isChecked) {
-			yPrev=BigInteger.valueOf(4L*b*b);
-			k=-1;
-			yCurr=b2.multiply(v1).subtract(v2);
+			yPrev=y0;
+			k=-1L;
+			yCurr=bSqr.multiply(v1).subtract(v2);
 			yCurrD = yCurr.doubleValue();
 			long bigK=0;
 			while (!isChecked && yCurrD<4.0*ykUB) {
 				if (bigK==0 && yCurrD>4.0*b*b) {
 					bigK=k;
 				}
-				if (bigK!=0 && k<bigK) {
+				if (bigK!=0 && k<=bigK-1) {
 					BigInteger[] sqrtArray = yCurr.sqrtAndRemainder();
 					if (sqrtArray[1].equals(BigInteger.ZERO)) {
-						System.out.printf("adding d=%8d, a=%6d, b=%3d, t=%6d, u=%3d, K=%2d, k=%2d, yCurr=%8d\n",d,a,b,t,u,bigK,k,yCurr);
+						System.out.printf("adding d=%8d, a=%6d, b=%3d, t=%6d, u=%3d, K=%2d, k=%2d, 4*yCurr=%8d\n",d,a,b,t,u,bigK,k,yCurr);
 						isChecked=true;
 					}
 				}
@@ -160,12 +168,12 @@ public class BAllNaSqrSearch
 				yPrev=yCurr;
 				yCurr=yT;
 				yCurrD=yCurr.doubleValue();
-				k=k-1;
+				k=k-1L;
 			}
 		}
 		if (isChecked) {
 			System.out.println("d:="+d+";nrmA:="+(a*a-d*b*b*b*b)+";s:=IntegralQuarticPoints([d,0,0,0,nrmA]);printf \"d=%o, nrmA=%o, number=%o, solns=%o\\n\",d, nrmA, #s, s;");
-			c2=c2+1;
+			c2=c2+1L;
 		}
 		return c2;
 	}
