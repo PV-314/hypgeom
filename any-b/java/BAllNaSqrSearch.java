@@ -13,7 +13,7 @@ public class BAllNaSqrSearch
 			BAllNaSqrSearch app = new BAllNaSqrSearch();
 			app.doBWork(b);
 		} else {
-			long b = 13L;
+			long b = 17L;
 			BAllNaSqrSearch app = new BAllNaSqrSearch();
 			app.doBWork(b);
 		}
@@ -106,7 +106,6 @@ public class BAllNaSqrSearch
 				long nrmA = a*a-d*b4;
 				if (nrmA < 0 && isSquare(-nrmA)) {
 					c2=c2+processBigIntegerTuple(a, b, d, t, u, ykUB);
-					//aTupleList.add(new ATuple(a, b, d, t, u, ykUB));
 					c1 = c1+1L;
 				}
 			}
@@ -130,8 +129,7 @@ public class BAllNaSqrSearch
 		double yCurrD = yCurr.doubleValue();
 		boolean isChecked=false;
 		while (!isChecked && yCurrD<4.0*ykUB) {
-			// recall that m_1 \geq 2 for the positively-indexed elements
-			// m_2 \geq 3 for all nrmA code
+			// recall we need only check k_1 \geq 2 for the positively-indexed elements
 			if (k >= 2L) {
 				BigInteger[] sqrtArray = yCurr.sqrtAndRemainder();
 				if (sqrtArray[1].equals(BigInteger.ZERO)) {
@@ -225,38 +223,44 @@ public class BAllNaSqrSearch
 
 	private double getYM1UpperBound(long aLB, long b, long d, long t, long u) {
 		long absNrmA = d*b*b*b*b-aLB*aLB;
+		double nA12 = Math.sqrt(absNrmA);
+		double b12 = Math.sqrt(b);
 		double d12 = Math.sqrt(d);
-		double d34 = Math.sqrt(d12*d12*d12);
-		// the simplified bounds for steps 1 and 2 reduce the time by over half
-		// from equation (4.19)
-		double yM1Step1UB = 0.19*b*b*absNrmA/d;
 
-		// from equation (4.21)
-		double yM1Step2UB = b*b*absNrmA/10.0/d;
+		// the simplified (and weaker) bounds for steps 1 and 2 reduce the time by over half
+		// from equation (4.18)
+		double yM1Step1UB = 0.19*b*b*b12*absNrmA*nA12/d;
 
-		double sqrtNA = Math.sqrt(absNrmA);
+		// from equation (4.20)
+		double yM1Step2UB = b*b*b*absNrmA*nA12/10.0/d;
+
 		long gnd4Value = 2L; // 1/(gnd4)^(2-1/(2*r-1)) \leq 1/2^(2-1/(2*r-1))
-		// from equation (4.27)
-		double yM1Step3UBBase = 59.2*sqrtNA*sqrtNA*sqrtNA*b/d12/gnd4Value/gnd4Value;
+		// from equation (4.25)
+		double yM1Step3UBBase = 59.2*absNrmA*nA12/d12/gnd4Value/gnd4Value;
 		// r_0=2 value: exponent=1/(2*r_0-1)=1/3.
-		// if 67.1*...>1, then the max contribution comes from (67.1*...)^(1/3)
-		// if 67.1*... \leq 1, then as r_0->+infty, the rem^(1/(2*r_0-1)) term
-		// approaches 1 from below
-		double yM1Step3UBRem = Math.max(1,67.1*sqrtNA*sqrtNA*sqrtNA*sqrtNA*sqrtNA*b*b*b*b*b*b*b*gnd4Value/d);
-		double yM1Step3UB = yM1Step3UBBase*Math.pow(yM1Step3UBRem, 1.0/3); // r_0=2 value
-		// yM1Step3UB=max(yM1Step3UB,yM1Step3UBBase*yM1Step3UBRem^(1/5)); \\ r_0=3 value
-		// yM1Step3UB=max(yM1Step3UB,yM1Step3UBBase*yM1Step3UBRem^(1/7)); \\ r_0=4 value
+		// if yM1Step3UBRem>1, then the max rem contribution comes from yM1Step3UBRem^(1/3)
+		// if yM1Step3UBRem \leq 1, then as r_0->+infty, the rem^(1/(2*r_0-1)) term approaches 1 from below
+		double yM1Step3UBRem = 0.195*nA12*b*b*b*b*gnd4Value/d;
+		if (yM1Step3UBRem>1) {
+			yM1Step3UBRem=Math.pow(yM1Step3UBRem, 1.0/3);
+		} else {
+			yM1Step3UBRem=1.0;
+		}
+		double yM1Step3UB = yM1Step3UBBase*yM1Step3UBRem;
 
-		// from equation (4.29)
-		double yM1Step4UBBase = 65.32*sqrtNA*sqrtNA*sqrtNA/d12/gnd4Value/gnd4Value;
+		// from equation (4.28)
+		double yM1Step4UBBase = 65.32*absNrmA*nA12/d12/gnd4Value/gnd4Value;
 		// r_0=2 value: exponent=1/2/(r_0-1)=1/2.
-		// if 422*...>1, then the max contribution comes from (422*...)^(1/2)
-		// if 422*... \leq 1, then as r_0->+infty, the rem^(1/2/(r_0-1)) term approaches
-		// 1 from below
-		double yM1Step4UBRem = Math.max(1, 422*Math.abs(absNrmA*absNrmA*absNrmA)*b*b/d);
-		double yM1Step4UB = yM1Step4UBBase*Math.sqrt(yM1Step4UBRem);
-		// yM1Step4UB=max(yM1Step4UB,yM1Step4UBBase*yM1Step4UBRem^(1/4)); \\ r_0=3 value
-		// yM1Step4UB=max(yM1Step4UB,yM1Step4UBBase*yM1Step4UBRem^(1/6)); \\ r_0=4 value
+		// if yM1Step4UBRem>1, then the max contribution comes from yM1Step4UBRem^(1/2)
+		// if yM1Step4UBRem \leq 1, then as r_0->+infty, the rem^(1/2/(r_0-1)) term approaches 1 from below
+		double yM1Step4UBRem = 1.648*absNrmA*b*b*b*b/d;
+		if (yM1Step4UBRem>1) {
+			yM1Step4UBRem=Math.sqrt(yM1Step4UBRem);
+		} else {
+			yM1Step4UBRem=1.0;
+		}
+		double yM1Step4UB = yM1Step4UBBase*yM1Step4UBRem;
+
 		double yM1UB = Math.max(yM1Step1UB, yM1Step2UB);
 		yM1UB = Math.max(yM1UB, yM1Step3UB);
 		yM1UB = Math.max(yM1UB, yM1Step4UB);
