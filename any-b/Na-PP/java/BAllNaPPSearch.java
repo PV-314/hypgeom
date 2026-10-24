@@ -3,7 +3,7 @@ import java.time.Duration;
 import java.util.Arrays;
 
 /**
- * squares in sequences of the form (a+b*sqrt(d))*((t+u*sqrt(d))/2)^(2*k)
+ * squares in sequences of the form (a+b^2*sqrt(d))*((t+u*sqrt(d))/2)^(2*k)
  */
 public class BAllNaPPSearch
 {
