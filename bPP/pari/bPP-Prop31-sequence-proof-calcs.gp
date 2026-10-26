@@ -1,9 +1,6 @@
-read("hypgeom\\general\\hypg-utils.gp");
+read("..\\..\\general\\pari\\hypg-utils.gp");
 
 \\ note this is for Prop 3.1 of the prime-power paper (hence the name).
-\\ Based on b1-Prop41-sequence-proof-calcs.gp, which is based on Lemma41-sequence-proof-calcs.gp
-\\ this is for checking the calculations and numerical values in the proof of Prop 3.1 (hence filename)
-\\ 16 August 2023
 bPP_check()={
 	my(aLB,bLB,bLBEven,bLBOdd,bnd1,bnd2,bnd6,bnd7,bnd8,c0,c1,c2,c3,c42,cAct,
 	cPolyMin,cUB,cUB1,cUB2,d,d4,dioLBConst,dLB,dLB_41,dUB,e2LB,eLB,eLBCnst,eLBDenom,eLBRecip,
