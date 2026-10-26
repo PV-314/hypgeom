@@ -1,8 +1,7 @@
-read("hypgeom\\general\\hypg-utils.gp");
+read("..\\..\\general\\pari\\hypg-utils.gp");
 
 \\ entry point (and check_small_d()) to functions in this file.
 \\ d=a^2+b
-\\ 28 Jan 2024
 search_all_d(dbg=0)={
 	my(dUB,m4Soln,p4Soln,startTime,t,u);
 
@@ -30,7 +29,6 @@ search_all_d(dbg=0)={
 	print("DONE: time taken=",(getwalltime()-startTime));
 }
 
-\\ 28 Jan 2024
 check_dtu(d,t,u,dUB,msg,dbg=0)={
 	my(aUB,b,bLBDenom,isOK);
 	
@@ -54,7 +52,6 @@ check_dtu(d,t,u,dUB,msg,dbg=0)={
 	);
 }
 
-\\ 28 Jan 2024
 check_abdtu(a,b,d,t,u,bLBDenom,msg,dbg=0)={
 	my(c0,c1,indices,out,seqCount,solnCount,solns,u0,y0,yk,ykLB,ykUB,yM1,yP1);
 
@@ -133,7 +130,6 @@ check_abdtu(a,b,d,t,u,bLBDenom,msg,dbg=0)={
 	);
 }
 
-\\ 10 Sept 2023
 check_small_d()={
 	my(aUB,b,b2Pow,bOdd,c,isOK);
 	
