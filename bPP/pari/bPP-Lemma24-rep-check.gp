@@ -1,4 +1,4 @@
-read("hypgeom\\general\\hypg-utils.gp");
+read("..\\..\\general\\pari\\hypg-utils.gp");
 
 \\ to check when we have one family of solutions
 \\ We only need d=1 mod 8 if p \neq 2 in the definition of b
