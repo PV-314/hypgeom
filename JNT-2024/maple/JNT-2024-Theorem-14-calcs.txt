@@ -1,0 +1,90 @@
+# for finding the initial 33 values of d for u=1 and 7 values of d for u=2
+thm14_dvalues_check:=proc()
+	local a,aUB,cu1,cu2,d,nrmA:
+	
+	cu1:=0:
+	cu2:=0:
+	for d from 2 to 1370/4 do
+		if not issqr(d) and (issqr(4+d) or issqr(-4+d) or issqr(4+d*4) or issqr(-4+d*4)) then
+			if issqr(4+d) or issqr(-4+d) then
+				cu1:=cu1+1:
+				printf("cu1=%3d, cu2=%3d: d=%3d\n",cu1,cu2,d):
+			fi:
+			if d*16<=1370/4 and (issqr(4+d*4) or issqr(-4+d*4)) then
+				cu2:=cu2+1:
+				printf("cu1=%3d, cu2=%3d: d=%3d\n",cu1,cu2,d):
+			fi:
+		fi:
+	od:
+end proc:
+
+# for finding the 20 sequences where y_{-2} does not exceed the lower bound
+thm14_check:=proc()
+	local a,aUB,cu1,cu2,d,gNd4Sqr,nrmA,t,u,y0,yLB,yM1,yM2:
+	
+	cu1:=0:
+	cu2:=0:
+	for d from 2 to 350 do
+		if not issqr(d) and (issqr(4+d) or issqr(-4+d) or issqr(4+d*4) or issqr(-4+d*4)) then
+			aUB:=evalf(sqrt(d)):
+			for a from 1 to aUB do
+				nrmA:=a*a-d:
+				if nrmA<0 and issqr(-nrmA) then
+					#bPrime:=nrmA/gcd(a*a,d):
+					#gNd4Sqr:=gcd(a*a,d)*2:
+					#if bPrime mod 16=0 then
+					#	gNd4Sqr:=gNd4Sqr*4*16:
+					#else if bPrime mod 8=0 then
+					#	gNd4Sqr:=gNd4Sqr*4*8:
+					#else if bPrime mod 4=0 then
+					#	gNd4Sqr:=gNd4Sqr*4*4:
+					#else if bPrime mod 2=0 then
+					#	gNd4Sqr:=gNd4Sqr*4*2:
+					#fi:
+					# using (|g|*N_{d',4})^2 \geq 4
+					gNd4Sqr:=4:
+					if d<=10*137/gNd4Sqr and (issqr(4+d) or issqr(-4+d)) then
+						u:=1:
+						cu1:=cu1+1:
+						printf("cu1=%3d, cu2=%3d: (a,d,nrmA)=(%3d, %3d, %3d)\n",cu1,cu2,a,d,nrmA):
+						if issqr(4+d) then
+							t:=sqrt(4+d):
+						fi:
+						if issqr(-4+d) then
+							t:=sqrt(-4+d):
+						fi:
+						y0:=1:
+						yM1:=(t*t+d*u*u-2*a*t*u)/4:
+						yM2:=(t*t+d*u*u)*yM1/2-y0:
+						#if issqr(yM2) then
+							yLB:=evalf(137.0*abs(1.0*nrmA)^(3/2)/gNd4Sqr/sqrt(d)):
+							if yM2<yLB then
+								printf("(a,d,t,u,nrmA,yM2)=(%3d, %3d, %3d, %3d, %4d, %a), yLB=%9.6f\n",a,d,t,u,nrmA,yM2,yLB):
+							fi:
+						#fi:
+					fi:
+					if d*16<=10*137/gNd4Sqr and (issqr(4+d*4) or issqr(-4+d*4)) then
+						u:=2:
+						cu2:=cu2+1:
+						printf("cu1=%3d, cu2=%3d: (a,d,nrmA)=(%3d, %3d, %3d)\n",cu1,cu2,a,d,nrmA):
+						if issqr(4+4*d) then
+							t:=sqrt(4+4*d):
+						fi:
+						if issqr(-4+4*d) then
+							t:=sqrt(-4+4*d):
+						fi:
+						y0:=1:
+						yM1:=(t*t+d*u*u-2*a*t*u)/4:
+						yM2:=(t*t+d*u*u)*yM1/2-y0:
+						#if issqr(yM2) then
+							yLB:=evalf(137.0*abs(1.0*nrmA)^(3/2)/gNd4Sqr/sqrt(d)):
+							if yM2<yLB then
+								printf("(a,d,t,u,nrmA,yM2)=(%3d, %3d, %3d, %3d, %4d, %a), yLB=%9.6f\n",a,d,t,u,nrmA,yM2,yLB):
+							fi:
+						#fi:
+					fi:
+				fi:
+			od:
+		fi:
+	od:
+end proc:
