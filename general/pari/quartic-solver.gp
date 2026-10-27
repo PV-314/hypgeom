@@ -1,7 +1,7 @@
-\\ Rigorous reduction of
+\\ Solution of
 \\             x^2 - d*y^4 = n,   d > 1, n < 0,
-\\ to a finite list of quartic Thue equations.
-\\ One entry point is
+\\ by reduction to a finite list of quartic Thue equations.
+\\ The entry point for the reduction alone is
 \\             quartic_to_thue(d,n)
 \\ and the entry point for the solver, which is most likely what you want, is
 \\             quartic_thue_solve(d,n).
