@@ -1,4 +1,4 @@
-read("..\..\..\general\pari\quartic_thue.gp");
+read("..\..\..\general\pari\quartic-solver.gp");
 
 \\ call the seven functions, check_b1(), check_b2(),..., check_b7()
 \\ the other functions are only for use with these seven functions
