@@ -1,11 +1,10 @@
-read("hypgeom\\general\\hypg-utils.gp");
+read("..\\..\\general\\pari\\hypg-utils.gp");
 
 \\ finds small solutions of x^2-(a^2+mul*p^m)*y^4=-mul*p^m
 \\ usage:
 \\ eqn_soln_search(mul)
 \\ this will do the search. Only supports mul=1,2,4,8,16
 
-\\ 4 Sept 2024
 eqn_soln_search(mul,dbg=0)={
 	my(b,d,pLB,solnM4,solns,xSqr);
 

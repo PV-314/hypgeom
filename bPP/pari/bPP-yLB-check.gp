@@ -1,7 +1,6 @@
-read("hypgeom\\general\\hypg-utils.gp");
+read("..\\..\\general\\pari\\hypg-utils.gp");
 
 \\ b a prime power (so this is for part (a) of the y lower bound lemma)
-\\ 4 Sept 2023
 search_bPP_all()={
 	forstep(b=1,10000000,1,
 		if(b==1 || isprimepower(b),
@@ -10,7 +9,6 @@ search_bPP_all()={
 	);
 }
 
-\\ 4 Sept 2023
 search_bPP(b)={
 	my(b2,cnst,d,e,m4Soln,minV,p4Soln,sqrtD,t,u,vM1,vP1,yM1,yP1);
 
@@ -76,7 +74,6 @@ search_bPP(b)={
 }
 
 \\ remember that y=sqrt(y_k)
-\\ 20 Dec 2023
 doProofCaseCheck(a,b,d,t,u,y,dbg=0)={
 	my(bDivs,b1,b2,g1,g2,is23Checked,is24Checked,is25Checked,is26Checked,isChecked,r,s,yv1,yv2);
 	
@@ -226,7 +223,6 @@ doProofCaseCheck(a,b,d,t,u,y,dbg=0)={
 }
 
 \\ for b=4*p^m
-\\ 4 Sept 2023
 search_b2_all()={
 	for(b=2,10000,
 		b2=gcd(65536*65536*65536*65536,b);
@@ -236,7 +232,6 @@ search_b2_all()={
 	);
 }
 
-\\ 4 Sept 2023
 search_b2(b)={
 	my(b2,cnst,d,t,u,yM1,yP1);
 
@@ -297,7 +292,7 @@ search_b2(b)={
 	);
 }
 
-\\ a smarter search for good examples for Lemma 2.4()a when b is a prime power
+\\ a smarter search for good examples for Lemma 2.1(a) when b is a prime power
 \\ this enabled us to find the third example
 \\
 \\ basis:
@@ -312,7 +307,6 @@ search_b2(b)={
 \\ but in fact, from this and once we have t and u, we can solve for a and then for b such that t^2-(a*a+b)*u^2=\pm 4
 \\
 \\ large tUB here so that the 3rd example (with u=865) is found
-\\ 9 Sept 2024
 search_parta_1(uLB)={
 	my(t,v,yk);
 

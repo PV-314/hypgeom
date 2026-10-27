@@ -1,11 +1,10 @@
-read("hypgeom\\general\\hypg-utils.gp");
+read("..\\..\\general\\pari\\hypg-utils.gp");
 
 \\ finds small solutions of x^2-(a^2+mul*p^m)*y^4=-mul*p^m
 \\ usage:
 \\ eqn_soln_search(mul)
 \\ this will do the search. Only supports mul=1,2,4,8,16
 
-\\ 4 Sept 2024
 sqr_search(mul,dbg=0)={
 	my(c0,c1,isPP,nrmA,nrmACore,pLB,pow2,solnM4,solnP4,t,u,solns,startTime,uUB,y0,yM1,yP1);
 
@@ -79,7 +78,6 @@ sqr_search(mul,dbg=0)={
 }
 
 \\ based on some of the examples found with b=16*p^m where N(e)=1
-\\ 7 Sept 2024
 b16pm_search(uLB,dbg=0)={
 	my(a);
 	
@@ -125,7 +123,6 @@ b16pm_search_from_a(a,u,msg)={
 
 \\ the family of examples in the paper
 \\ pseudoprimes for n=2818 and 4635 too (tested to n=5000)
-\\ 7 Sept 2024
 b16pm_family()={
 	my(a,b,b1C,b1P,biT,t,uC,uP,uT,yM1);
 	
