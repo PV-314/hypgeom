@@ -1,4 +1,4 @@
-read("..\..\..\general\pari\quartic_thue.gp");
+read("..\..\..\general\pari\quartic-solver.gp");
 
 \\ call the following three functions, for b=5,13,17, respectively
 \\ check_b5()
