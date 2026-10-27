@@ -2,9 +2,10 @@
 \\ run_tests() retains the original large ranges.
 \\ run_tests(0,30,50,100): focused suite plus 1,250 bounded comparisons.
 \\ run_tests(0,1,0,100): focused suite only.
+
 \\ Separate deliberate-fault tests (PowerShell 7, temporary copies only):
 \\ pwsh -File quartic_thue_mutation_tests.ps1 -GpPath C:/path/to/gp.exe
-read("quartic_thue.gp");
+read("quartic-solver.gp");
 
 qt_test_assert(ok,label)={
 	if (!ok,error("quartic_thue test failure: ",label));
