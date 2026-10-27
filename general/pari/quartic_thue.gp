@@ -702,7 +702,6 @@ qt_recover(R, eqsol)={
 	return(Set(Vec(ans)));
 }
 
-\\ 30 August 2026
 quartic_thue_solve_from(R,dbg=0)={
 	my(E,initflag,j,polcache,S,startTime,T,thueflag,tnfcache);
 
