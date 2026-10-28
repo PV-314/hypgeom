@@ -86,7 +86,7 @@ check_b_d_n_t_u(b,d,nrmA,t,u,dbg=0)={
 			r03Max=0;
 			for(r0=2,10,
 				\\ykUB3=59.2*abs(nrmA)^(3/2)/sqrt(d)/gNd4Sqr*(167*abs(nrmA)^(5/2)*b^4*sqrt(gNd4Sqr)/d)^(1/(2*r0-1));
-				ykUB3=59.2*abs(nrmA)^(3/2)/sqrt(d)/gNd4Sqr*(0.181*(16*b^4*abs(nrmA))^4*fArray[1]^8*0.181*abs(nrmA)^2*gNd4Sqr^2/b^16/d^4)^(1/4/(2*r0-1));
+				ykUB3=59.2*abs(nrmA)^(3/2)/sqrt(d)/gNd4Sqr*(0.181*(16*b^4*abs(nrmA))^4*fArray[1]^8*abs(nrmA)^2*gNd4Sqr^2/b^16/d^4)^(1/4/(2*r0-1));
 				if(ykUB3>ykUB3Max,
 					r03Max=r0;
 				);
@@ -96,7 +96,7 @@ check_b_d_n_t_u(b,d,nrmA,t,u,dbg=0)={
 			ykUB4Max=0;
 			r04Max=0;
 			for(r0=2,10,
-				ykUB4=65.32*abs(nrmA)^(3/2)/sqrt(d)/gNd4Sqr*(16*b^4*abs(nrmA)*fArray[1]^2/0.1911/b^4/d)^(1/2/(r0-1)); \\ (4.21)
+				ykUB4=65.32*abs(nrmA)^(3/2)/sqrt(d)/gNd4Sqr*(16*b^4*abs(nrmA)*fArray[1]^2*abs(nrmA)/0.1911/b^4/d)^(1/2/(r0-1)); \\ (4.21)
 				if(ykUB4>ykUB4Max,
 					r04Max=r0;
 				);
@@ -144,7 +144,7 @@ check_b_d_n_t_u(b,d,nrmA,t,u,dbg=0)={
 			r03Max=0;
 			for(r0=2,10,
 				\\ykUB3=59.2*abs(nrmA)^(3/2)/sqrt(d)/gNd4Sqr*(167*abs(nrmA)^(5/2)*b^4*sqrt(gNd4Sqr)/d)^(1/(2*r0-1));
-				ykUB3=59.2*abs(nrmA)^(3/2)/sqrt(d)/gNd4Sqr*(0.181*(16*b^4*abs(nrmA))^4*fArray[1]^8*0.181*abs(nrmA)^2*gNd4Sqr^2/b^16/d^4)^(1/4/(2*r0-1));
+				ykUB3=59.2*abs(nrmA)^(3/2)/sqrt(d)/gNd4Sqr*(0.181*(16*b^4*abs(nrmA))^4*fArray[1]^8*abs(nrmA)^2*gNd4Sqr^2/b^16/d^4)^(1/4/(2*r0-1));
 				if(ykUB3>ykUB3Max,
 					r03Max=r0;
 				);
@@ -154,7 +154,7 @@ check_b_d_n_t_u(b,d,nrmA,t,u,dbg=0)={
 			ykUB4Max=0;
 			r04Max=0;
 			for(r0=2,10,
-				ykUB4=65.32*abs(nrmA)^(3/2)/sqrt(d)/gNd4Sqr*(16*b^4*abs(nrmA)*fArray[1]^2/0.1911/b^4/d)^(1/2/(r0-1)); \\ (4.21)
+				ykUB4=65.32*abs(nrmA)^(3/2)/sqrt(d)/gNd4Sqr*(16*b^4*abs(nrmA)*fArray[1]^2*abs(nrmA)/0.1911/b^4/d)^(1/2/(r0-1)); \\ (4.21)
 				if(ykUB4>ykUB4Max,
 					r04Max=r0;
 				);

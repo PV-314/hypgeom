@@ -411,7 +411,7 @@ public class BAllNaAllSearch
 		double yM1Step1UB = 10.9*Math.pow(1.0*b*absNrmA,26.0/11)/Math.pow(d,12.0/11);
 
 		// from equation (4.16)
-		double yM1Step2UB = 9.1*Math.pow(1.0*absNrmA/d,5.0/2)*b83/Math.pow(d,7.0/6);
+		double yM1Step2UB = 9.1*Math.pow(1.0*absNrmA,5.0/2)*b83/Math.pow(d,7.0/6);
 
 		// from equation (4.20) (no longer needed. Smaller than bound in (4.22))
 		//double yM1Step3UB = 260.0*b65*(1.0*absNrmA)*(1.0*absNrmA)*(1.0*absNrmA)/d;
