@@ -1,4 +1,5 @@
 \\ calc_gnd4LB                  given N_a, it calculates lower bound for g*\cN_{d,4}
+\\ calc_gnd_from_abd            given a,b,d, it calculates g*\cN_{d,4} using Lemma 3.12 in b=1, nrmA paper (JNT 2024)
 \\ calc_gnd4_from_nrmACore_and_xk	what the name says
 \\ calc_gnd4_from_xk		what the name says
 \\ calc_gNSqr(t,u1,u2)		returns [gSqr,nd4Sqr] for the args
@@ -8,6 +9,7 @@
 \\ get_solns_from_e
 \\ get_solns_from_e2
 \\ get_val(v,p)			returns v_p(v)
+\\ make_sequences(c0,c1,yM1,y0,yP1,d,a,b,t,u)
 \\ output_solns			used in the end-proof-sequence-check scripts
 \\ quadcheck_a2b		returns 1 if gcd(a,b)=1 and x^2-(a*a+b)*y^2=-b*b has just one family of solutions. Returns 0 otherwise
 \\ quadcheck_a2b2		returns 1 if gcd(a,b)=1 and x^2-(a*a+b*b)*y^2=-b*b has just one family of solutions. Returns 0 otherwise
@@ -740,11 +742,11 @@ get_solns_from_e2(a,b,c,t,u,dbg=0)={
 	yNegPrev=1;
 
 	yPosCurr=(2*a*t*u+t*t+u*u*d);
-	xPosCurr2=d*yPosCurr*yPosCurr-b;
+	xPosCurr2=d*yPosCurr*yPosCurr-b*c*c;
 
 	yNegCurr=(-2*a*t*u+t*t+u*u*d);
 	
-	xNegCurr2=d*yNegCurr*yNegCurr-b;
+	xNegCurr2=d*yNegCurr*yNegCurr-b*c*c;
 
 	for(i=1,6,
 		if(dbg!=0,print(i,": xPosCurr2=",xPosCurr2,", yPosCurr=",yPosCurr));
@@ -753,9 +755,9 @@ get_solns_from_e2(a,b,c,t,u,dbg=0)={
 			\\print(i,": added xPosCurr2,yPosCurr: solns=",solns);
 		);
 		yT=c1*yPosCurr+c0*yPosPrev;
-		yPosPrerv=yPosCurr;
+		yPosPrev=yPosCurr;
 		yPosCurr=yT;
-		xPosCurr2=d*yPosCurr*yPosCurr-b;
+		xPosCurr2=d*yPosCurr*yPosCurr-b*c*c;
 
 		if(dbg!=0,print(i,": xNegCurr2=",xNegCurr2,", yNegCurr=",yNegCurr));
 		if(xNegCurr2>0 && yNegCurr!=0 && gcd(xNegCurr2,yNegCurr)==1 && issquare(xNegCurr2) && issquare(abs(yNegCurr)),
@@ -765,7 +767,7 @@ get_solns_from_e2(a,b,c,t,u,dbg=0)={
 		yT=c1*yNegCurr+c0*yNegPrev;
 		yNegPrev=yNegCurr;
 		yNegCurr=yT;
-		xNegCurr2=d*yNegCurr*yNegCurr-b;
+		xNegCurr2=d*yNegCurr*yNegCurr-b*c*c;
 	);
 	return([solns,min(yNegCurr,yPosCurr)]);
 }
@@ -836,6 +838,25 @@ calc_gnd4LB(nrmA)={
 	return(8);
 }
 
+\\ return |g|\cN_{d,4}, hence the function name
+\\ uses value in Lemma~lem:gNd4
+calc_gnd_from_abd(a,b,d,dbg=0)={
+	my(bPrime,g,nrmA,v,vBP,vBP1);
+	if(gcd(a,b)!=1,
+		print("ERROR in calc_gnd_from_abd(): a=",a,", b=",b", gcd(a,b)=",gcd(a,b));
+		error();
+	);
+	nrmA=a*a-d*b*b*b*b;
+	g=gcd(a*a,d*b*b*b*b);
+	bPrime=nrmA/g;
+	vBP=valuation(bPrime,2);
+	vBP1=1+min(2,vBP/2);
+	v=sqrt(g)*2^vBP1;
+	if(dbg!=0,
+		printf("in calc_gnd_abd() for a=%3d, b=%2d, d=%2d, g=%4d, vBP1=%s\n",a,b,d,g,vBP1);
+	);
+	return(v);
+}
 \\ return [gSqr,nSqr] - use squares because both g and \cN_{d,4} can have square roots in them
 \\ 16 June 2020 (but in g-values.gp from before (May 2020)
 calc_gNSqr(t,u1,u2)={
@@ -893,6 +914,7 @@ calc_gnd4_from_nrmACore_and_xk(nrmA,xk)={
 }
 
 round_down(num,places)={
+	my(e,v);
 	if(type(num)=="t_POL" || type(num)=="t_RFRAC",
 		print("ERROR in round_down(): num=",num," must a positive number. It is ",type(num));
 		1/0;
@@ -911,6 +933,7 @@ round_down(num,places)={
 }
 
 round_up(num,places)={
+	my(e,v);
 	if(type(num)=="t_POL" || type(num)=="t_RFRAC",
 		print("ERROR in round_up(): num=",num," must a positive number. It is ",type(num));
 		1/0;
@@ -1018,7 +1041,7 @@ output_solns(a,b,t,u)={
 \\ 9 April 2020
 \\ copied (bad!) from my-ell-utils.gp (in prim-div\general\pari)
 get_val(v,p)={
-	my(v1,vDen,vDenP,vNum,vNumP);
+	my(c,v1,vDen,vDenP,vNum,vNumP);
 
 	if(type(v)!="t_INT" && type(v)!="t_FRAC",
 		print("ERROR in get_val(): v=",v,", must be an integer or a rational number");
@@ -1208,6 +1231,12 @@ output_magma_procedure()={
 
 \\ 10 Sept 2023
 do_magma_output(d,nrmA)={
-	printf("d:=%7d;nrmA:=%4d;\n",d,nrmA);
+	printf("d:=%7d;nrmA:=%4d;",d,nrmA);
 	print("CheckEqn(d,nrmA);");
+}
+\\ 10 Sept 2026
+do_pari_output(d,nrmA)={
+	printf("d=%7d;nrmA=%4d;",d,nrmA);
+	print("check_d_n(d,nrmA,dbg);");
+	\\print("CheckEqn(d,nrmA);");
 }

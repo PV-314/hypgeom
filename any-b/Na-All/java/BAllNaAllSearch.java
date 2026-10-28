@@ -365,8 +365,7 @@ public class BAllNaAllSearch
 		boolean found = false;
 		while (yCurr.doubleValue() < limit) {
 			if (k >= kPosLB && isSquare(yCurr)) {
-				System.out.printf("adding d=%8d, a=%6d, b=%3d, t=%6d, u=%3d, k=%2d, 4*yCurr=%8d\n",
-						d, a, b, t, u, k, yCurr);
+				System.out.printf("adding d=%8d, a=%6d, b=%3d, t=%6d, u=%3d, k=%2d, 4*yCurr=%8d\n",d, a, b, t, u, k, yCurr);
 				found = true;
 				break;
 			}
@@ -383,8 +382,7 @@ public class BAllNaAllSearch
 			while (yCurr.doubleValue() < limit) {
 				if (bigK == 0 && yCurr.doubleValue() > 4.0 * b * b) bigK = k;
 				if (bigK != 0 && k <= bigK - kNegUB && isSquare(yCurr)) {
-					System.out.printf("adding d=%8d, a=%6d, b=%3d, t=%6d, u=%3d, K=%2d, k=%2d, 4*yCurr=%8d\n",
-							d, a, b, t, u, bigK, k, yCurr);
+					System.out.printf("adding d=%8d, a=%6d, b=%3d, t=%6d, u=%3d, K=%2d, k=%2d, 4*yCurr=%8d\n",d, a, b, t, u, bigK, k, yCurr);
 					found = true;
 					break;
 				}
@@ -395,7 +393,10 @@ public class BAllNaAllSearch
 			}
 		}
 		if (found) {
-			System.out.println("d:="+d+";nrmA:="+(a*a-d*b*b*b*b)+";s:=IntegralQuarticPoints([d,0,0,0,nrmA]);printf \"d=%o, nrmA=%o, number=%o, solns=%o\\n\",d, nrmA, #s, s;");
+			// Magma
+			//System.out.println("d:="+d+";nrmA:="+(a*a-d*b*b*b*b)+";s:=IntegralQuarticPoints([d,0,0,0,nrmA]);printf \"d=%o, nrmA=%o, number=%o, solns=%o\\n\",d, nrmA, #s, s;");
+			// PARI:
+			System.out.printf("d=%8d;nrmA=%11d;u=%2d;check_b_d_n_u(b,d,nrmA,u,dbg);\n",d,a*a-d*b*b*b*b,u);
 			return 1;
 		}
 		return 0;
