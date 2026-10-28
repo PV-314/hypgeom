@@ -57,9 +57,10 @@ qt_test_brute(d,n,dbg=0)={
 };
 
 check_b5()={
-	my(d,dbg,nrmA);
+	my(d,dbg,nrmA,startTime);
 
 	dbg=1;
+	startTime=getwalltime();
 	\\ u=1
 	d=5;nrmA=-1444;check_d_n(d,nrmA,dbg);
 	d=8;nrmA=-2500;check_d_n(d,nrmA,dbg);
@@ -73,12 +74,14 @@ check_b5()={
 	
 	\\ u=4
 	d=2;nrmA=-625;check_d_n(d,nrmA,dbg);
+	print("total b=5 time(ms)=",getwalltime()-startTime,"=",strtime(getwalltime()-startTime));
 }
 
 check_b13()={
-	my(d,dbg,nrmA);
+	my(d,dbg,nrmA,startTime);
 	
 	dbg=1;
+	startTime=getwalltime();
 	\\ u=1
 	d=8;nrmA=-114244;check_d_n(d,nrmA,dbg);
 	d=13;nrmA=-257049;check_d_n(d,nrmA,dbg);
@@ -90,12 +93,14 @@ check_b13()={
 	
 	\\ u=4
 	d=2;nrmA=-28561;check_d_n(d,nrmA,dbg);
+	print("total b=13 time(ms)=",getwalltime()-startTime,"=",strtime(getwalltime()-startTime));
 }
 
 check_b17(dbg=0)={
-	my(d,dbg,nrmA);
+	my(d,dbg,nrmA,startTime);
 	
 	dbg=1;
+	startTime=getwalltime();
 	\\ u=1
 	d=8;nrmA=-334084;check_d_n(d,nrmA,dbg);
 	d=8;nrmA=-56644;check_d_n(d,nrmA,dbg);
@@ -111,4 +116,5 @@ check_b17(dbg=0)={
 	
 	\\ u=4
 	\\d=2;nrmA=-83521;check_d_n(d,nrmA,dbg);
+	print("total b=17 time(ms)=",getwalltime()-startTime,"=",strtime(getwalltime()-startTime));
 }

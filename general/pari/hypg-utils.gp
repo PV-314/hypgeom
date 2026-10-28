@@ -718,7 +718,7 @@ get_clean_solutions(K,d,v,fuAlg,fuAlgC,dbg)={
 \\ this condition has been removed on 10 Nov 2019: with t and u not both integers if t^2-(a*a+b*c*c)u^2 =1 (because we will use e^2 below)
 \\ 
 \\ return a two-element array
-\\ array[1] is a Pari Set of all the solutions of x^2-(a*a+b*c*c)y^4=-b
+\\ array[1] is a Pari Set of all the solutions of x^2-(a*a+b*c*c)y^4=-b*c*c
 \\ that come from first few elements of
 \\ (a+sqrt(a*a+b*c*c))*e^(2*k) (where e=t+u*sqrt(a*a+b*c*c) and k is small in absolute value)
 \\ array[2] is a lower bound on y for any further solutions
@@ -1001,7 +1001,7 @@ check_sequence(a,b,t,u,yLB,yUB)={
 
 \\ used in the end-of-proof-sequence-check scripts
 output_solns(a,b,t,u)={
-	my(d,k,yNegPrev,yNegCurr,yPosPrev,yPosCurryTemp);
+	my(c0,c1,d,k,yNegPrev,yNegCurr,yPosPrev,yPosCurr,yTemp);
 	
 	d=a*a+b;
 	\\ the recurrence coefficients when using e=(t+u*sqrt(d))/2
@@ -1183,7 +1183,7 @@ make_sequences(c0,c1,yM1,y0,yP1,d,a,b,t,u,dbg=0)={
 \\ also d1=sqrt(y0) (we assume y0 is a sqr)
 \\ for helping with other functions
 \\ 24 Jan 2020
-output_squares(a,b,c0,c1,yM1,y0,yP1,t,u)={
+output_squares(a,b,c0,c1,yM1,y0,yP1,t,u,dbg=0)={
 	my(yNegCurr,yNegPrev,yPosCurr,yPosPrev,yT);
 
 	yPosPrev=y0;

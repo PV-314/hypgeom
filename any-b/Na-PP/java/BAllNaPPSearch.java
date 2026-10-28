@@ -367,7 +367,7 @@ public class BAllNaPPSearch
 		double yM1Step3UB = 82.0*Math.pow(1.0*b*b*b*b*absNrmA*absNrmA*absNrmA*absNrmA*absNrmA, 1.0/3)/d12;
 
 		// from equation (4.23)
-		double yM1Step4UB = 432.0*b*b*absNrmA*absNrmA/d12;
+		double yM1Step4UB = 423.0*b*b*absNrmA*absNrmA/d12;
 		double yM1UB = Math.max(16.0*absNrmA/d12, 4.0*b*b*absNrmA/d);
 		yM1UB = Math.max(yM1UB, yM1Step1UB);
 		yM1UB = Math.max(yM1UB, yM1Step2UB);

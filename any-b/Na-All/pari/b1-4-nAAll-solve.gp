@@ -61,19 +61,22 @@ qt_test_brute(d,n,dbg=0)={
 
 \\ the variables a,b,t,u are only here so the source sequences can be identified
 check_b1()={
-	my(a,b,d,dbg,nrmA,u);
+	my(a,b,d,dbg,nrmA,startTime,u);
 
 	dbg=1;
+	startTime=getwalltime();
 	a=     1;b= 1;d=         8;t=     2;u= 1;nrmA=     -7;check_d_n(d,nrmA,dbg);
 	a=     1;b= 1;d=        12;t=     4;u= 1;nrmA=    -11;check_d_n(d,nrmA,dbg);
 	a=     2;b= 1;d=         8;t=     2;u= 1;nrmA=     -4;check_d_n(d,nrmA,dbg);
 	a=     2;b= 1;d=        13;t=     3;u= 1;nrmA=     -9;check_d_n(d,nrmA,dbg);
+	print("total b=1 time(ms)=",getwalltime()-startTime,"=",strtime(getwalltime()-startTime));
 }
 
 check_b2()={
-	my(a,b,d,dbg,nrmA,u);
+	my(a,b,d,dbg,nrmA,startTime,u);
 	
 	dbg=1;
+	startTime=getwalltime();
 	\\ u=1
 	a=     1;b= 2;d=         8;t=     2;u= 1;nrmA=   -127;check_d_n(d,nrmA,dbg);
 	a=     2;b= 2;d=        12;t=     4;u= 1;nrmA=   -188;check_d_n(d,nrmA,dbg);
@@ -101,12 +104,14 @@ check_b2()={
 	a=     3;b= 2;d=        15;t=     8;u= 2;nrmA=   -231;check_d_n(d,nrmA,dbg);
 	a=     3;b= 2;d=        37;t=    12;u= 2;nrmA=   -583;check_d_n(d,nrmA,dbg);
 	a=     4;b= 2;d=         2;t=     2;u= 2;nrmA=    -16;check_d_n(d,nrmA,dbg);
+	print("total b=2 time(ms)=",getwalltime()-startTime,"=",strtime(getwalltime()-startTime));
 }
 
 check_b3(dbg=0)={
-	my(a,b,d,dbg,nrmA,u);
+	my(a,b,d,dbg,nrmA,startTime,u);
 	
 	dbg=1;
+	startTime=getwalltime();
 	\\ u=1
 	a=     1;b= 3;d=         5;t=     1;u= 1;nrmA=   -404;check_d_n(d,nrmA,dbg);
 	a=     1;b= 3;d=         5;t=     3;u= 1;nrmA=   -404;check_d_n(d,nrmA,dbg);
@@ -187,12 +192,14 @@ check_b3(dbg=0)={
 	\\ u=4
 	a=    10;b= 3;d=         6;t=    10;u= 4;nrmA=   -386;check_d_n(d,nrmA,dbg);
 	a=    12;b= 3;d=         6;t=    10;u= 4;nrmA=   -342;check_d_n(d,nrmA,dbg);
+	print("total b=3 time(ms)=",getwalltime()-startTime,"=",strtime(getwalltime()-startTime));
 }
 
 check_b4(dbg=0)={
-	my(a,b,d,dbg,nrmA,u);
+	my(a,b,d,dbg,nrmA,startTime,u);
 	
 	dbg=1;
+	startTime=getwalltime();
 	\\ u=1
 	a=     4;b= 4;d=         8;t=     2;u= 1;nrmA=  -2032;check_d_n(d,nrmA,dbg);
 	a=     8;b= 4;d=        12;t=     4;u= 1;nrmA=  -3008;check_d_n(d,nrmA,dbg);
@@ -270,4 +277,5 @@ check_b4(dbg=0)={
 
 	\\ u=7
 	a=   285;b= 4;d=      1788;t=   296;u= 7;nrmA=-376503;check_d_n(d,nrmA,dbg);
+	print("total b=4 time(ms)=",getwalltime()-startTime,"=",strtime(getwalltime()-startTime));
 }
