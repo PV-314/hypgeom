@@ -339,7 +339,7 @@ public class BAllNaSqrSearch
 			// MAGMA output
 			//System.out.println("d:="+d+";nrmA:="+(a*a-d*b*b*b*b)+";s:=IntegralQuarticPoints([d,0,0,0,nrmA],["+b+","+a+"]);printf \"d=%o, nrmA=%o, number=%o, solns=%o\\n\",d, nrmA, #s, s;");
 			// PARI output
-			System.out.printf("d=%8d;nrmA=%11d;u=%2d;check_b_d_n_u(b,d,nrmA,u,dbg);\n",d,a*a-d*b*b*b*b,u);
+			System.out.printf("d=%8d;nrmA=%11d;check_d_n(d,nrmA,dbg);\n",d,a*a-d*b*b*b*b);
 			c2=c2+1L;
 		}
 		return c2;
