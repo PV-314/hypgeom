@@ -144,11 +144,11 @@ b16pm_family()={
 		);
 		if(!issquare(yM1),
 			print("BAD yM1: n=",n,", u=",uC,", b=",b,"=",factor(b),", yM1=",yM1);
-			1/0;
+			error();
 		);
 		if((3*uC+1)^2-3*b1C*b1C!=-2,
 			print("BAD rel: n=",n,", u=",uC,", b=",b,"=",factor(b),", yM1=",yM1);
-			1/0;
+			error();
 		);
 		b1T=14*b1C-b1P;
 		b1P=b1C;

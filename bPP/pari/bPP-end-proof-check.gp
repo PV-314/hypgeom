@@ -102,7 +102,7 @@ check_abdtu(a,b,d,t,u,bLBDenom,msg,dbg=0)={
 								printf("        x=%7d: y:=%4d\n",sqrtint(x2),i);
 							);
 						);
-						return(1/0);
+						error();
 					);
 					if(solnCount==4,
 						printf("        x^2-dy^4=-b has four solns for a=%5d, b=%8d, d=%8d\n",a,b,d);
@@ -121,7 +121,7 @@ check_abdtu(a,b,d,t,u,bLBDenom,msg,dbg=0)={
 								printf("        x=%7d: y:=%4d\n",sqrtint(x2),i);
 							);
 						);
-						return(1/0);
+						error();
 					);
 				);
 				seqCount=seqCount+1;

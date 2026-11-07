@@ -229,9 +229,12 @@ check_e_and_q_for_units(a,d,t,u,minE,minQ,dbg=0)={
 	my(gnd4,nrmA,xc,xp,xt,yc,yLimit,yp,yt);
 	
 	nrmA=a*a-d;
+
+	\\ Once yc>yLimit, both inequalities (3.37) and (3.38) hold.
 	gnd4=calc_gnd_from_abd(a,1,d);
 	yLimit=max(1.5*abs(nrmA)/(0.1832*gnd4*sqrt(d)), 500*gnd4/(21.12*sqrt(d)));
 	yLimit=max(1,yLimit);
+
 	\\ xPrevious and xCurrent, yPrevious and yCurrent. Hence variable naming
 	\\ checking first for positive k
 	xp=a;

@@ -864,7 +864,7 @@ calc_gNSqr(t,u1,u2)={
 	
 	if(t>-1,
 		print("ERROR in calc_gNSqr(): t=",t," must be negative");
-		1/0;
+		error();
 	);
 	g1=gcd(u1,u2);
 	g2=gcd(u1/g1,t);
@@ -917,13 +917,11 @@ round_down(num,places)={
 	my(e,v);
 	if(type(num)=="t_POL" || type(num)=="t_RFRAC",
 		print("ERROR in round_down(): num=",num," must a positive number. It is ",type(num));
-		1/0;
-		return();
+		error();
 	);
 	if(num<0 || num==0,
 		print("ERROR in round_down(): num=",num," must be positive");
-		1/0;
-		return();
+		error();
 	);
 	e=floor(log(num)/log(10))-(places-1);
 	\\print("num=",num,", e=",e);
@@ -936,13 +934,11 @@ round_up(num,places)={
 	my(e,v);
 	if(type(num)=="t_POL" || type(num)=="t_RFRAC",
 		print("ERROR in round_up(): num=",num," must a positive number. It is ",type(num));
-		1/0;
-		return();
+		error();
 	);
 	if(num<0 || num==0,
 		print("ERROR in round_up(): num=",num," must be positive");
-		1/0;
-		return();
+		error();
 	);
 	e=floor(log(num)/log(10))-(places-1);
 	v=ceil(num/10.0^e)*10.0^e;
@@ -1045,15 +1041,15 @@ get_val(v,p)={
 
 	if(type(v)!="t_INT" && type(v)!="t_FRAC",
 		print("ERROR in get_val(): v=",v,", must be an integer or a rational number");
-		1/0;
+		error();
 	);
 	if(p<2,
 		print("ERROR in get_val(): p=",p,", must be a positive integer that is prime");
-		1/0;
+		error();
 	);
 	if(!isprime(p),
 		print("ERROR in get_val(): p=",p,", must be a positive integer that is prime");
-		1/0;
+		error();
 	);
 	if(v==0,return(10000));
 	vNum=numerator(v);
@@ -1064,7 +1060,7 @@ get_val(v,p)={
 		vNumP=vNumP*p;
 		c=c+1;
 		\\print("p=",p,", vNum=",vNum);
-		\\if(c>10,1/0);
+		\\if(c>10,error());
 	);
 	
 	vDen=denominator(v);
