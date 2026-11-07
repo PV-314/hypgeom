@@ -49,13 +49,8 @@ check_e_and_q_with_estimates_for_all_d(dbg=0)={
 			for(a=1,aUB,
 				nrmA=a*a-d;
 				if(nrmA<0,
-					yLB=max(4,ceil(abs(nrmA)/4));
+					yLB=max(2,ceil(abs(nrmA)/4));
 					simple_check_ad(a,d,yLB,dbg);
-					if(a==9 && d==104,
-						print("a=",a,", d=",d,", yLB=",yLB);
-						simple_check_ad(a,d,yLB,1);
-						\\error();
-					);
 				);
 			);
 		);
@@ -70,7 +65,7 @@ check_e(dbg=0)={
 	dLB=1; \\129;
 	minV=1.2;
 	denomCnst=4*exp(1.68);
-	\\ for d>1200, then ok
+	\\ d>109,000 covered by the analytic estimate
 	for(d=2,109000,
 		if(!issquare(d),
 			if(d%50000==0,print("d=",d));
@@ -161,7 +156,6 @@ check_y(y,a,d,nrmA,denomCnst,gn4,minV,dbg=0)={
 \\ for use by check_e_and_q_with_estimates_for_b*() functions above
 \\ uses actual value of gn4, but a lower bound for y to check (3.37) and (3.38) in Lemma 3.13
 \\ if this initial check fails, then use the more detailed check_e_and_q_estimates_for_ad() function
-\\ 16 April 2020
 simple_check_ad(a,d,yLB,dbg=0)={
 	my(b,gnd4,lhsE,lhsQ,minE,minQ,nrmA,v);
 
@@ -225,17 +219,20 @@ check_e_and_q_estimates_for_ad(a,d,minE,minQ,dbg=0)={
 		check_e_and_q_for_units(a,d,t,u,minE,minQ,dbg);
 	);
 	if(length(solnM4)==0 && length(solnP4)==0,
-		error("no solutions found for \pm 4 Pell equation for (a,d)=(",a,", ",d,")");
+		error("no solutions found for \pm 4 Pell equation for (a,d)=(",a,", ",d,"). Likely need to increase precision with \p");
 	);
 	return([minE,minQ]);
 }
 
 \\ HELPER function only
 check_e_and_q_for_units(a,d,t,u,minE,minQ,dbg=0)={
-	my(nrmA,xc,xp,xt,yc,yp,yt);
+	my(gnd4,nrmA,xc,xp,xt,yc,yLimit,yp,yt);
 	
 	nrmA=a*a-d;
-	\\ xPrevious and xCurrent, yPrevious and yCurrent
+	gnd4=calc_gnd_from_abd(a,1,d);
+	yLimit=max(1.5*abs(nrmA)/(0.1832*gnd4*sqrt(d)), 500*gnd4/(21.12*sqrt(d)));
+	yLimit=max(1,yLimit);
+	\\ xPrevious and xCurrent, yPrevious and yCurrent. Hence variable naming
 	\\ checking first for positive k
 	xp=a;
 	yp=1;
@@ -249,7 +246,8 @@ check_e_and_q_for_units(a,d,t,u,minE,minQ,dbg=0)={
 		print("BAD! in check_e_and_q_for_units(): a=",a,", d=",d,", nrmA=",nrmA,", t=",t,", u=",u,", k=1, xc=",xc,", yc=",yc,", xc*xc-d*yc*yc=",(xc*xc-d*yc*yc));
 		error();
 	);
-	for(k=2,5,
+	k=2;
+	while(yc<=yLimit || yc<yp,	
 		xt=(t*t+d*u*u)*xc/2-xp;
 		yt=(t*t+d*u*u)*yc/2-yp;
 		xp=xc;
@@ -264,6 +262,7 @@ check_e_and_q_for_units(a,d,t,u,minE,minQ,dbg=0)={
 			minE=check_e_for_y(a,d,xc,yc,minE,k,dbg);
 			minQ=check_q_for_y(a,d,xc,yc,minQ,k,dbg);
 		);
+		k=k+1;
 	);
 
 	xp=a;
@@ -281,7 +280,8 @@ check_e_and_q_for_units(a,d,t,u,minE,minQ,dbg=0)={
 		minE=check_e_for_y(a,d,xc,yc,minE,-1,dbg);
 		minQ=check_q_for_y(a,d,xc,yc,minQ,-1,dbg);
 	);
-	for(k=2,5,
+	k=2;
+	while(yc<=yLimit || yc<yp,	
 		xt=(t*t+d*u*u)*xc/2-xp;
 		yt=(t*t+d*u*u)*yc/2-yp;
 		xp=xc;
@@ -296,6 +296,7 @@ check_e_and_q_for_units(a,d,t,u,minE,minQ,dbg=0)={
 			minE=check_e_for_y(a,d,xc,yc,minE,-k,dbg);
 			minQ=check_q_for_y(a,d,xc,yc,minQ,-k,dbg);
 		);
+		k=k+1;
 	);
 }
 
