@@ -1,0 +1,14 @@
+{
+  "packageId": "JNT-2024-faithful-20261106-f2-evidence1",
+  "auditedProofRelease": "JNT-2024-faithful-20261106-f2",
+  "archive": "JNT-2024-faithful-20261106-f2-evidence1.zip",
+  "sha256": "158fc598a641828d30b5e543608a66c5e6e61d64104eb8881ce2cf522b726990",
+  "bytes": 3224475,
+  "files": 285,
+  "crc": "passed",
+  "finalFreshExtractionVerification": "passed",
+  "embeddedBuildAndAuditEvidence": "f2 fresh build and full audits, unchanged",
+  "embeddedArchiveEvidence": "original f2 archive record and new candidate extraction verification logs",
+  "additionalCleanBuildPerformed": false,
+  "previousReleaseZipsUnchanged": 10
+}
