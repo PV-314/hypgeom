@@ -1,0 +1,29 @@
+{
+  "file": "AnyB-NormSquare-07b-faithful-release.zip",
+  "sha256": "0eb6395d2d8d879271778f9b952908d8715ce138c936beaa4d38d6ae3141af30",
+  "bytes": 7961473,
+  "files": 176,
+  "manuscript_complete": true,
+  "conditional_on_agreed_premises": true,
+  "manuscript_revision": "2026-11-07b",
+  "corrected_power_step": true,
+  "section5_complete": true,
+  "corrected_Q_chain": true,
+  "section41_prerequisites": true,
+  "section42_first_case": true,
+  "section4_complete_conditionally": true,
+  "proposition41_conditional": true,
+  "theorem13_conditional": true,
+  "conditional_q_bound": true,
+  "conditional_construction": true,
+  "denominator_estimate_proved": false,
+  "verified_lemmas": [
+    "2.1",
+    "3.1",
+    "3.2(a,b,c)",
+    "3.3",
+    "3.4",
+    "3.5",
+    "3.6"
+  ]
+}
