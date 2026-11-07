@@ -1,4 +1,4 @@
-read("..\..\..\general\pari\hypg-utils.gp");
+read("../../../general/pari/hypg-utils.gp");
 
 \\ call the following four functions, for b=1,2,3,4, respectively
 \\ check_b1()

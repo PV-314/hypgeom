@@ -1,4 +1,4 @@
-read("..\..\general\pari\hypg-utils.gp");
+read("../../general/pari/hypg-utils.gp");
 
 \\ search to see if any are missed
 check_all(dbg=0)={

@@ -1,4 +1,4 @@
-read("..\..\general\pari\hypg-utils.gp");
+read("../../general/pari/hypg-utils.gp");
 
 \\ (1-use first) analytic_estimates -- for first part of lem:eq-LB lemma proof
 \\ check_e -- a brute force method to check value of E for "small" a and b

@@ -1,4 +1,4 @@
-read("..\..\general\pari\hypg-utils.gp");
+read("../../general/pari/hypg-utils.gp");
 
 \\ sequence of y_k's from (a+b*sqrt(d))*((t+u*sqrt(d))/2)^(2k)
 \\ eSqr in function name means using epsilon^2. Hence ((t+u*sqrt(d))/2)^(2k), not ((t+u*sqrt(d))/2)^k
