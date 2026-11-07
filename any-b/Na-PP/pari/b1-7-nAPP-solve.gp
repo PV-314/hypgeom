@@ -8,31 +8,34 @@ check_d_n(d,nrmA,dbg=0)={
 	
 	startTime=getwalltime();
 	print("\nd=",d,", nrmA=",nrmA,": ",factor(nrmA));
-	soln=quartic_thue_solve(d,nrmA,dbg);
-	allSolns=Set();
-	for(i=1,length(soln),
-		cSoln=soln[i];
-		if(cSoln[1]>0 && cSoln[2]>0,
-			allSolns=setunion(allSolns,[cSoln]);
+	nrmAOdd=-nrmA/gcd(nrmA,65536*65536*65536);
+	if(!isprimepower(nrmAOdd) && !issquare(-nrmA) && nrmAOdd!=1,
+		soln=quartic_thue_solve(d,nrmA,dbg);
+		allSolns=Set();
+		for(i=1,length(soln),
+			cSoln=soln[i];
+			if(cSoln[1]>0 && cSoln[2]>0,
+				allSolns=setunion(allSolns,[cSoln]);
+			);
 		);
-	);
-	bfSolns=qt_test_brute(d,nrmA,dbg);
-	print("Number of solutions=",length(allSolns),", allSolns=",allSolns,", time(ms)=",getwalltime()-startTime,"=",strtime(getwalltime()-startTime));
-	if(length(allSolns)!=length(bfSolns),
-		print("CHECK: length(allSolns)=",length(allSolns),", length(bfSolns)=",length(bfSolns));
-		print("allSolns=",allSolns);
-		print("total bfSolns=",bfSolns);
-		return();
-	);
-	for(i=1,length(allSolns),
-		ind=setsearch(bfSolns,allSolns[i]);
-		if(ind==0,
-			print("BAD: could not find allSolns[i]=",allSolns[i]," in bfSolns");
+		bfSolns=qt_test_brute(d,nrmA,dbg);
+		print("Number of solutions=",length(allSolns),", allSolns=",allSolns,", time(ms)=",getwalltime()-startTime,"=",strtime(getwalltime()-startTime));
+		if(length(allSolns)!=length(bfSolns),
+			print("CHECK: length(allSolns)=",length(allSolns),", length(bfSolns)=",length(bfSolns));
+			print("allSolns=",allSolns);
+			print("total bfSolns=",bfSolns);
+			return();
 		);
-	);
-	if(length(allSolns)>3,
-		print("BIG!!");
-		return();
+		for(i=1,length(allSolns),
+			ind=setsearch(bfSolns,allSolns[i]);
+			if(ind==0,
+				print("BAD: could not find allSolns[i]=",allSolns[i]," in bfSolns");
+			);
+		);
+		if(length(allSolns)>3,
+			print("BIG!!");
+			return();
+		);
 	);
 }
 

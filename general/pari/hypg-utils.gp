@@ -843,8 +843,7 @@ calc_gnd4LB(nrmA)={
 calc_gnd_from_abd(a,b,d,dbg=0)={
 	my(bPrime,g,nrmA,v,vBP,vBP1);
 	if(gcd(a,b)!=1,
-		print("ERROR in calc_gnd_from_abd(): a=",a,", b=",b", gcd(a,b)=",gcd(a,b));
-		error();
+		error("ERROR in calc_gnd_from_abd(): a=",a,", b=",b", gcd(a,b)=",gcd(a,b));
 	);
 	nrmA=a*a-d*b*b*b*b;
 	g=gcd(a*a,d*b*b*b*b);
