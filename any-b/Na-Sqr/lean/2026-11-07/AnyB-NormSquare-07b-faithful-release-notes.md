@@ -6,3 +6,5 @@ Six premises remain explicit and unproved. Each result uses only the premises it
 
 - **From JNT-2024** — `DenominatorEstimate4`, `AkhtariTheorem11`, and the earlier Magma calculation `Section46Magma`.
 - **From Section 5.6** — completeness of the Java tuple enumeration (`JavaEnumeration`), correctness and completeness of the bounded square search (`JavaSquareSearch`), and completeness of the sequence-specific Magma and PARI/GP quartic results (`ExceptionalQuartics`).
+
+The Java, PARI/GP and Maple sources are pinned to PV-314/hypgeom commit `2dbf585df104582e6fcb7dd1a7357996cf460bd2`. The Java source uses the default package.

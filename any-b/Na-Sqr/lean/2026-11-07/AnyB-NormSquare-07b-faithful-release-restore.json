@@ -1,7 +1,7 @@
 {
   "archive": "AnyB-NormSquare-07b-faithful-release.zip",
-  "sha256": "0eb6395d2d8d879271778f9b952908d8715ce138c936beaa4d38d6ae3141af30",
-  "verified_payload_files": 176,
+  "sha256": "6c5ec2bd7a3c4162ad60c973499e7dbdd3fe19319e6ad556f2b0f62400295231",
+  "verified_payload_files": 179,
   "local_build_cache_supplied": false,
   "source_checked_jnt_cache": true,
   "exact_git_package_cache": true,
@@ -20,7 +20,7 @@
       "C:\\Users\\44798\\Documents\\ChatGPT\\bees\\JNT-2024_lean\\lean-4.35.0-windows\\bin\\lake.exe",
       "build"
     ],
-    "seconds": 600.42
+    "seconds": 541.36
   },
   "proof_audit": {
     "exit": 0,
@@ -31,7 +31,7 @@
       "--root=.",
       "Audit.lean"
     ],
-    "seconds": 92.34
+    "seconds": 138.06
   },
   "status": "passed"
 }
