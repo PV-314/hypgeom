@@ -206,7 +206,7 @@ check_b_d_n_t_u(b,d,nrmA,t,u,dbg=0)={
 	);
 }
 
-\\ t1 and u1 come first power of fundamental unit
+\\ t1 and u1 come from the first power of fundamental unit
 \\ returns the array [f,r,s]
 calc_fk(a,b,d,t1,u1,k,yk,dbg=0)={
 	my(fa,fb,myLHS,myRHS,nrmA,nrmE,nrmECurr,r1a,r1b,r1,rb,s1,s1P,sA,tCurr,tM1,tNext,uCurr,uM1,uNext,xCalc,xk,xk2,yCalc);
@@ -273,7 +273,7 @@ calc_fk(a,b,d,t1,u1,k,yk,dbg=0)={
 		print("for a=",a,", b=",b,", d=",d,", t1=",t1,", u1=",u1,", nrmA=",nrmA,", bigK=",bigK,", k=",k,", yk=",yk," is not a square");
 	);
 	y=sqrtint(yk);
-	myLHS=(xCalc+nrmE*sqrt(nrmA))/(a+sqrt(nrmA));
+	myLHS=(xCalc+nrmE^k*sqrt(nrmA))/(a+sqrt(nrmA));
 	myRHS=((a*uCurr+b*b*tCurr)-uCurr*sqrt(nrmA))/2/b^2;
 	myRHS=myRHS^2;
 	if(dbg!=0,
@@ -289,7 +289,7 @@ calc_fk(a,b,d,t1,u1,k,yk,dbg=0)={
 	\\print((4*b*b*r1a)^2*(x+nrmE*sqrt(nrmA)));
 	\\print((a+sqrt(nrmA))*(r1a+s1P*sqrt(sA))^4);
 	if(dbg!=0,
-		print("diff(a)=",(4*b*b*r1a)^2*(xCalc+nrmE*sqrt(nrmA))-(a+sqrt(nrmA))*(r1a+s1P*sqrt(sA))^4);
+		print("diff(a)=",(4*b*b*r1a)^2*(xCalc+nrmE^k*sqrt(nrmA))-(a+sqrt(nrmA))*(r1a+s1P*sqrt(sA))^4);
 	);
 	g12a=gcd(gcd(4*b*b*r1a/core(r1a),r1a*r1a),s1P^2);
 	if(!issquare(g12a),
@@ -310,7 +310,7 @@ calc_fk(a,b,d,t1,u1,k,yk,dbg=0)={
 	\\print((4*b*b*r1a)^2*(x+nrmE*sqrt(nrmA)));
 	\\print((a+sqrt(nrmA))*(r1a+s1P*sqrt(sA))^4);
 	if(dbg!=0,
-		print("diff(b)=",(4*b*b*r1b)^2*(xCalc+nrmE*sqrt(nrmA))-(a+sqrt(nrmA))*(r1b+s1P*sqrt(sA))^4);
+		print("diff(b)=",(4*b*b*r1b)^2*(xCalc+nrmE^k*sqrt(nrmA))-(a+sqrt(nrmA))*(r1b+s1P*sqrt(sA))^4);
 	);
 	g12b=gcd(gcd(4*b*b*r1b/core(r1b),r1b*r1b),s1P^2);
 	if(!issquare(g12b),
