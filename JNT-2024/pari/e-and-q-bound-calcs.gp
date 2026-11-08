@@ -175,11 +175,7 @@ simple_check_ad(a,d,yLB,dbg=0)={
 		if(dbg!=0,
 			print("in simple_check_ad(): checking small E using a=",a,", d=",d,", nrmA=",nrmA);
 		);
-		v=check_e_and_q_estimates_for_ad(a,d,minE,minQ,dbg);
-		\\ no need already logged
-		\\if(v[1]<minE,
-		\\	printf("BAD E: a=%4d, b=%6d, Q=%8.6f\n",a,b,v[1]);
-		\\);
+		check_e_and_q_estimates_for_ad(a,d,minE,minQ,dbg);
 	);
 
 	\\ Q check now
@@ -192,16 +188,11 @@ simple_check_ad(a,d,yLB,dbg=0)={
 		if(dbg!=0,
 			print("in simple_check_ad(): checking small Q using a=",a,", d=",d,", nrmA=",nrmA);
 		);
-		v=check_e_and_q_estimates_for_ad(a,d,minE,minQ,dbg);
-		\\ no need already logged
-		\\if(v[2]<minQ,
-		\\	printf("BAD Q: a=%4d, b=%6d, Q=%8.6f\n",a,b,v[2]);
-		\\);
+		check_e_and_q_estimates_for_ad(a,d,minE,minQ,dbg);
 	);
 }
 
 \\ simple_check_ad() calls this
-\\ return [minE,minQ]
 check_e_and_q_estimates_for_ad(a,d,minE,minQ,dbg=0)={
 	my(nrmA,solnM4,solnP4,xc,xp,yc,yp);
 	
@@ -221,7 +212,6 @@ check_e_and_q_estimates_for_ad(a,d,minE,minQ,dbg=0)={
 	if(length(solnM4)==0 && length(solnP4)==0,
 		error("no solutions found for \pm 4 Pell equation for (a,d)=(",a,", ",d,"). Likely need to increase precision with \p");
 	);
-	return([minE,minQ]);
 }
 
 \\ HELPER function only

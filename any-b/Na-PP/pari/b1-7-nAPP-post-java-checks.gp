@@ -206,7 +206,8 @@ check_b_d_n_t_u(b,d,nrmA,t,u,dbg=0)={
 	);
 }
 
-\\ t1 and u1 in the arguments come from first power of fundamental unit
+\\ t1 and u1 in the arguments define the "input unit", e = (t1 + u1*sqrt(d))/2.
+\\ The unit \varepsilon in Proposition 3.1 of the JNT 2024 paper is e^k in the code below.
 \\ returns [f,r,s] in the notation of the proof of Prop 3.1 in the JNT 2024 paper
 calc_fk(a,b,d,t1,u1,k,yk,dbg=0)={
 	my(fa,fb,myLHS,myRHS,nrmA,nrmE,nrmECurr,r1a,r1b,r1,rb,s1,s1P,sA,tCurr,tM1,tNext,uCurr,uM1,uNext,xCalc,xk,xk2,yCalc);

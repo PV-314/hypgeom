@@ -13,7 +13,7 @@ conj11_search_more_gen_eSqr(dLB=2,dUB=100,useSmallA=1,dbg=0)={
 	aSize=1000;
 	b1Size=1000;
 	startTime=getwalltime();
-	uUB=1030;
+	uUB=10^30;
 	for(d=dLB,dUB,
 		if(d%1==0,print("\nd=",d,", time taken=",(getwalltime()-startTime),"(ms)"));
 		if(!issquare(d) && issquarefree(d),

@@ -44,12 +44,15 @@ check_all(dbg=0)={
 							);
 						);
 					);
-					if(bigK==-2 && d==a*a+4 && t==a && u==1 && bigK!=-2,
+					if(d==a*a+4 && t==a && u==1 && bigK!=-2,
 						error("BAD norm -1: a=",a,", d=",d,", t=",t,", u=",u,", bigK=",bigK,", y_K=",yC);
 					);
-					if(bigK==-2 && d==a*a+1 && t==2*a && u==2 && bigK!=-2,
+					if(d==a*a+1 && t==2*a && u==2 && bigK!=-2,
 						error("BAD norm -1: a=",a,", d=",d,", t=",t,", u=",u,", bigK=",bigK,", y_K=",yC);
 					);
+					if(a==2 && d==5 && t==1 && u==1 && bigK!=-4,
+						error("BAD norm -1: a=",a,", d=",d,", t=",t,", u=",u,", bigK=",bigK,", y_K=",yC);
+					);					
 				);
 			);
 			t2=4+d*u*u;
@@ -86,14 +89,17 @@ check_all(dbg=0)={
 							);
 						);
 					);
-					if(bigK==-2 && d==a*a+4 && t==a && u==1 && bigK!=-2,
+					if(d==a*a+4 && t==a && u==1 && bigK!=-2,
 						print("BAD norm +1: a=",a,", d=",d,", t=",t,", u=",u,", bigK=",bigK,", y_K=",yC);
 						return();
 					);
-					if(bigK==-2 && d==a*a+1 && t==2*a && u==2 && bigK!=-2,
+					if(d==a*a+1 && t==2*a && u==2 && bigK!=-2,
 						print("BAD norm +1: a=",a,", d=",d,", t=",t,", u=",u,", bigK=",bigK,", y_K=",yC);
 						return();
 					);
+					if(a==2 && d==5 && t==1 && u==1 && bigK!=-4,
+						error("BAD norm -1: a=",a,", d=",d,", t=",t,", u=",u,", bigK=",bigK,", y_K=",yC);
+					);					
 				);
 			);
 		);

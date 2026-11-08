@@ -79,11 +79,11 @@ doProofCaseCheck(a,b,d,t,u,y,dbg=0)={
 	
 	g1=gcd((t+a*u)*(t+a*u),b*u*u);
 	if(g1!=1 && g1!=4,
-		printf("BAD g1=%3d: a:=%6d: b:=%5d: d:=%9d: t:=%6d: u:=%6d: 4*nrmE:=%6: y:=%6d: k=%2d\n",g1,a,b,d,t,u,(t*t-d*u*u)/4,y,a/abs(a));
+		printf("BAD g1=%3d: a:=%6d: b:=%5d: d:=%9d: t:=%6d: u:=%6d: 4*nrmE:=%6d: y:=%6d: k=%2d\n",g1,a,b,d,t,u,(t*t-d*u*u)/4,y,a/abs(a));
 		return();
 	);
 	if(g1==1 && b%2==0,
-		printf("BAD g1=1, but b even: a:=%6d: b:=%5d: d:=%9d: t:=%6d: u:=%6d: 4*nrmE:=%6: y:=%6d: k=%2d\n",g1,a,b,d,t,u,(t*t-d*u*u)/4,y,a/abs(a));
+		printf("BAD g1=%3d, but b even: a:=%6d: b:=%5d: d:=%9d: t:=%6d: u:=%6d: 4*nrmE:=%6d: y:=%6d: k=%2d\n",g1,a,b,d,t,u,(t*t-d*u*u)/4,y,a/abs(a));
 		return();
 	);
 	isChecked=0;

@@ -68,7 +68,7 @@ check_abdtu(a,b,d,t,u,bLBDenom,msg,dbg=0)={
 		solns=out[2];
 		ykLB=out[3];
 		if(ykLB<ykUB,
-			printf("ERROR: not enough terms created for d=%8d, a=%5d, b=%8d, t=%7d, u=%4d, largest term created=%9.6f, but need at least %9.6f\n",msg,d,a,b,t,u,ykLB,ykUB);
+			printf("ERROR: for %s, not enough terms created for d=%8d, a=%5d, b=%8d, t=%7d, u=%4d, largest term created=%9.6f, but need at least %9.6f\n",msg,d,a,b,t,u,ykLB,ykUB);
 			return();
 		);
 		seqCount=0;
