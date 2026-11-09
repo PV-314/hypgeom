@@ -1,0 +1,24 @@
+{
+  "archive": "AnyB-AnyNorm-08a-faithful-release.zip",
+  "sha256": "1701d049cc694508b1ed204ed8bb9bcb1d4229df8228285b22a77ce59fce3915",
+  "verified_archive_files": 85,
+  "verified_manifest_entries": 84,
+  "project_build": "passed on byte-identical Lean sources and configuration using the existing Lake cache",
+  "verified_local_declaration_axiom_closures": 542,
+  "fresh_extraction_checks": [
+    "ZIP CRC and SHA-256 manifest",
+    "Restore of both manuscript pairs and both Lean dependencies",
+    "Second restore verifying restored members",
+    "check_section56_size.py",
+    "check_section56.py",
+    "check_section56_refinement.py"
+  ],
+  "recursive_archive_scan": {
+    "member copies": 706,
+    "PDF copies": 5,
+    "archives including repeated copies": 4,
+    "known nontext font byte match": 1
+  },
+  "requested_textual_occurrences": 0,
+  "verification_transcript": "VERIFICATION.txt"
+}

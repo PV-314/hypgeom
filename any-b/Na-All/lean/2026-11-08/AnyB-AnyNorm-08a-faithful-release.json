@@ -1,0 +1,66 @@
+{
+  "file": "AnyB-AnyNorm-08a-faithful-release.zip",
+  "sha256": "1701d049cc694508b1ed204ed8bb9bcb1d4229df8228285b22a77ce59fce3915",
+  "bytes": 8159424,
+  "files": 85,
+  "manuscript_revision": "2026-11-08a",
+  "lean_toolchain": "leanprover/lean4:v4.35.0",
+  "conditional_on_agreed_premises": true,
+  "computational_sources_commit": "2dbf585df104582e6fcb7dd1a7357996cf460bd2",
+  "computational_sources": {
+    "any-b/Na-All/java/BAllNaAllSearch.java": {
+      "git_blob": "f9003f01ef455081b097178aba5ee30e83677a43",
+      "sha256": "f7cd8baf4d3fd343b88f7c30e9b67d2bd181ee50bd02b17655836d0d46691331"
+    },
+    "any-b/Na-All/pari/b1-4-nAAll-post-java-checks.gp": {
+      "git_blob": "3e1644b4f1c9ee5ab35e7f9b920fe99822e84725",
+      "sha256": "e37d8aeeb72891f7907efef0dd76a757ff2b62e74c57eef7aee0b42c65b897cf"
+    },
+    "any-b/Na-All/pari/b1-4-nAAll-solve.gp": {
+      "git_blob": "4bbc2b8d72e2b85767bcb84cf199cf9cdade1fa2",
+      "sha256": "f08a5666cb059490af6382370dd7c396ddb2243d25ca8135a845d63bbb04048d"
+    },
+    "general/pari/hypg-utils.gp": {
+      "git_blob": "9dec8e68d4e2271441ef50cf043d22c3922c81a1",
+      "sha256": "ac179febc55d37ab3fee55b0255ae72d08e2847c0a1d03f01ee05b6b50e30e02"
+    },
+    "general/pari/quartic-solver.gp": {
+      "git_blob": "7bec2e0a104ab561fa782c6b9e88bf307d11a490",
+      "sha256": "566c90e999538e4c6189b183f1ffcc9b022e7f937b455c2e36fc49722fdc4e11"
+    },
+    "any-b/Na-Sqr/java/BAllNaSqrSearch.java": {
+      "git_blob": "32ba88e695b48b16db3a8891c1d30ea7ada187ca",
+      "sha256": "cec234738405167ae9b4dc45df2f75f6f2c2ac666f52cf72aa9fb7190abedf18"
+    },
+    "any-b/Na-Sqr/pari/b5-13-17-nASqr-solve.gp": {
+      "git_blob": "a912b0ba64a352129d5deaf6d7223158d524786a",
+      "sha256": "e13623066a4e9acd28439673677f4bde61ee90b83f0d514ae9a832cf7ff463a9"
+    },
+    "any-b/Na-All/maple/bAll-nA-all-proof-calcs.txt": {
+      "git_blob": "fe84198d3867ddbe51c03a143c9a80290d34cabc",
+      "sha256": "c4d4a8ffc877869268fe4b9f0acd1d4318320c142d0658f89f17c85794b4e802"
+    },
+    "any-b/Na-Sqr/maple/bAll-nASqr-proof-calcs.txt": {
+      "git_blob": "ac1fbeb5d257631dcd7dbc8b64bb9c40d8e83d00",
+      "sha256": "0eb051210d4c0863ce0f85c0e6d2f0a3e44c41754e0aecb3defbdbb3fd5bbb8e"
+    }
+  },
+  "input_sha256": {
+    "sequence-version-any-b-any-nrmA-9solns-clean-2026-11-08a.tex": "ba5747aec18cc9824f735ecc7f4963d3c05863e610eab2511eabdeaf91f16294",
+    "sequence-version-any-b-any-nrmA-9solns-clean-2026-11-08a.pdf": "a4b37f4bee816a1dc004b205193e53775e8d4f78e06cd4c212ae8c7cbed27a98",
+    "sequence-version-b-1-post-proofs-version-2026-11-07-for-axiom.tex": "1bdd91f57c4153de005df78b13e0c703114b802949f7048f6c39e598567a78d9",
+    "sequence-version-b-1-post-proofs-version-2026-11-07-for-axiom.pdf": "37037c891013a46ad1501ba3c9c99dc8dafcd6fba3bf65fab32cd583ea63998c",
+    "JNT-2024-faithful-20261106-f2-evidence1.zip": "158fc598a641828d30b5e543608a66c5e6e61d64104eb8881ce2cf522b726990",
+    "AnyB-NormSquare-07b-lean-dependency.zip": "ae80c3cb3804ec8a9a0a468b4e21c30698ef8c5b75f6cc6aa693c97f6ac9e7af"
+  },
+  "upstream_dependencies": {
+    "any-b/Na-Sqr/lean/2026-11-07/AnyB-NormSquare-07b-faithful-release.zip": {
+      "git_blob": "9a97da19d2a8f1d053c16f18ac5793aba0bef428",
+      "sha256": "0eb6395d2d8d879271778f9b952908d8715ce138c936beaa4d38d6ae3141af30"
+    },
+    "JNT-2024/lean/2026-11-06/JNT-2024-faithful-20261106-f2-evidence1.zip": {
+      "git_blob": "f66dbee309a3a092469f0425ae549ed318be212b",
+      "sha256": "158fc598a641828d30b5e543608a66c5e6e61d64104eb8881ce2cf522b726990"
+    }
+  }
+}
