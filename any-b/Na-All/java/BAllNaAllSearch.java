@@ -50,7 +50,7 @@ public class BAllNaAllSearch
 	private void doBWork(long b) {
 		long uUB = 1L;
 		double dUB = getDUpperBound(b, uUB+1)[0];
-		while (dUB>1.999) {
+		while (dUB>1.99999) {
 			uUB=uUB+1L;
 			dUB = getDUpperBound(b, uUB+1)[0];
 		}
@@ -98,16 +98,16 @@ public class BAllNaAllSearch
 				long millis = System.currentTimeMillis()-uStartTime;
 				Duration duration = Duration.ofMillis(millis);
 				String s = String.format("%2dh, %2dmin, %2ds, %3dms", duration.toHours(), duration.toMinutesPart(), duration.toSecondsPart(), duration.toMillisPart());
-				System.out.printf("b=%2d, t=%6d (u=%3d is %5.2f percent done), d=%11d, c1=%12d, c2=%4d, total time=%9d(ms)=%s\n", b, t, u, (100.0*t/tUB), d+8L, c1, c2, millis, s);
+				System.out.printf("b=%2d, t=%6d (u=%3d is %5.2f percent done), c1=%12d, c2=%4d, total time=%9d(ms)=%s\n", b, t, u, (100.0*t/tUB), c1, c2, millis, s);
 			}
 		}
-		System.out.println("done b="+b+", u="+u+": total found "+c1+" equations, c2="+c2+". uTime="+(System.currentTimeMillis()-uStartTime));
+		System.out.println("done b="+b+", u="+u+": total examined tuples "+c1+" total retained tuples, c2="+c2+". uTime="+(System.currentTimeMillis()-uStartTime));
 		cArray[0]=c1;
 		cArray[1]=c2;
 	}
 
 	// c1 counts ALL a with negative norm (the original isNrmAValid returned true).
-	// c2 counts the equations requiring Magma.
+	// c2 counts the tuples that lead to equations requiring Magma.
 	private long[] doBDTUWork(long b, long d, long t, long u, double dBound) {
 		if (d > dBound) return new long[] {0, 0};
 		long b2 = Math.multiplyExact(b, b);
@@ -115,7 +115,7 @@ public class BAllNaAllSearch
 		// Strict negative norm: a*a < d*b^4. Correct the floating sqrt exactly.
 		long aMax = floorSqrt(db4 - 1);
 		if (aMax == 0) return new long[] {0, 0};
-		double limit = 4.0 * getYM1UpperBound(1, b, d, t, u);
+		double limit = 4.00001 * getYM1UpperBound(1, b, d, t, u);
 		TupleContext context = new TupleContext(b, d, t, u);
 		long c2 = 0;
 		if (aMax <= 256 || !Double.isFinite(limit) || limit <= context.y0.doubleValue()
@@ -356,6 +356,27 @@ public class BAllNaAllSearch
 		return SQUARE_MOD_64[value.intValue() & 63]	&& value.sqrtAndRemainder()[1].signum() == 0;
 	}
 
+	// does lots of expensive BigInteger arithmetic, but that is ok as it's basically
+	// only called when we output a tuple (and a small handful of other times. 3 at last count)
+	private static boolean checkProp41Bound(long a, long b, long d, BigInteger fourY) {
+	    BigInteger bigB = BigInteger.valueOf(b);
+	    BigInteger bigD = BigInteger.valueOf(d);
+	    BigInteger bigNa = bigD.multiply(bigB.pow(4)).subtract(BigInteger.valueOf(a).pow(2));
+
+	    // y_k <= 598*b^2*n^3/d, where fourY = 4*y_k.
+	    BigInteger rhs = BigInteger.valueOf(2392).multiply(bigB.pow(2)).multiply(bigNa.pow(3));
+	    if (fourY.multiply(bigD).compareTo(rhs) <= 0) return true;
+
+	    // y_k <= 10.9*(b*n)^(26/11)/d^(12/11).
+	    BigInteger tenZ = fourY.multiply(BigInteger.TEN);
+	    rhs = BigInteger.valueOf(436).pow(11).multiply(bigB.multiply(bigNa).pow(26));
+	    if (tenZ.pow(11).multiply(bigD.pow(12)).compareTo(rhs) <= 0) return true;
+
+	    // y_k <= 9.1*b^(8/3)*n^(5/2)/d^(7/6).
+	    rhs = BigInteger.valueOf(364).pow(6).multiply(bigB.pow(16)).multiply(bigNa.pow(15));
+	    return tenZ.pow(6).multiply(bigD.pow(7)).compareTo(rhs) <= 0;
+	}
+
 	// All recurrence terms are 4*y_k, just as in the original implementation.
 	private long processTuple(long a, long b, long d, long t, long u, double limit, TupleContext context) {
 		BigInteger offset = context.slope.multiply(BigInteger.valueOf(a));
@@ -365,6 +386,7 @@ public class BAllNaAllSearch
 		boolean found = false;
 		while (yCurr.doubleValue() < limit) {
 			if (k >= kPosLB && isSquare(yCurr)) {
+				if (!checkProp41Bound(a, b, d, yCurr)) break;
 				System.out.printf("adding d=%8d, a=%6d, b=%3d, t=%6d, u=%3d, k=%2d, 4*yCurr=%8d\n",d, a, b, t, u, k, yCurr);
 				found = true;
 				break;
@@ -382,7 +404,7 @@ public class BAllNaAllSearch
 			while (yCurr.doubleValue() < limit) {
 				if (bigK == 0 && yCurr.doubleValue() > 4.0 * b * b) bigK = k;
 				if (bigK != 0 && k <= bigK - kNegUB && isSquare(yCurr)) {
-					System.out.printf("adding d=%8d, a=%6d, b=%3d, t=%6d, u=%3d, K=%2d, k=%2d, 4*yCurr=%8d\n",d, a, b, t, u, bigK, k, yCurr);
+					if (!checkProp41Bound(a, b, d, yCurr)) break;					System.out.printf("adding d=%8d, a=%6d, b=%3d, t=%6d, u=%3d, K=%2d, k=%2d, 4*yCurr=%8d\n",d, a, b, t, u, bigK, k, yCurr);
 					found = true;
 					break;
 				}
@@ -395,7 +417,7 @@ public class BAllNaAllSearch
 		if (found) {
 			// MAGMA output
 			//System.out.println("d:="+d+";nrmA:="+(a*a-d*b*b*b*b)+";s:=IntegralQuarticPoints([d,0,0,0,nrmA],["+b+","+a+"]);printf \"d=%o, nrmA=%o, number=%o, solns=%o\\n\",d, nrmA, #s, s;");
-			// PARI:
+			// PARI output
 			System.out.printf("d=%8d;nrmA=%11d;u=%2d;check_b_d_n_u(b,d,nrmA,u,dbg);\n",d,a*a-d*b*b*b*b,u);
 			return 1;
 		}
@@ -403,10 +425,8 @@ public class BAllNaAllSearch
 	}
 
 	private double getYM1UpperBound(long aLB, long b, long d, long t, long u) {
-		long absNrmA = d*b*b*b*b-aLB*aLB;
-		double d12 = Math.sqrt(d);
+		double absNrmA = 1.0*d*b*b*b*b-1.0*aLB*aLB;
 		double b83 = Math.pow(b,8.0/3);
-		//double b65 = Math.pow(b,6.0/5);
 
 		// from equation (4.14)
 		double yM1Step1UB = 10.9*Math.pow(1.0*b*absNrmA,26.0/11)/Math.pow(d,12.0/11);
@@ -414,11 +434,11 @@ public class BAllNaAllSearch
 		// from equation (4.16)
 		double yM1Step2UB = 9.1*Math.pow(1.0*absNrmA,5.0/2)*b83/Math.pow(d,7.0/6);
 
-		// from equation (4.20) (no longer needed. Smaller than bound in (4.22))
+		// from equation (4.21) (no longer needed. Smaller than bound in (4.24))
 		//double yM1Step3UB = 260.0*b65*(1.0*absNrmA)*(1.0*absNrmA)*(1.0*absNrmA)/d;
 
-		// from equation (4.22)
-		double yM1Step4UB = 423.0*b*b*absNrmA*absNrmA*absNrmA/d12;
+		// from equation (4.24)
+		double yM1Step4UB = 598.0*b*b*absNrmA*absNrmA*absNrmA/d;
 		double yM1UB = Math.max(yM1Step1UB, yM1Step2UB);
 		//yM1UB = Math.max(yM1UB, yM1Step3UB);
 		yM1UB = Math.max(yM1UB, yM1Step4UB);

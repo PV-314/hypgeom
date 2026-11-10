@@ -311,7 +311,6 @@ check_b1()={
 	d=      12;nrmA=        -11;u= 1;check_b_d_n_u(b,d,nrmA,u,dbg);
 	d=      13;nrmA=         -9;u= 1;check_b_d_n_u(b,d,nrmA,u,dbg);
 	d=     533;nrmA=       -517;u= 1;check_b_d_n_u(b,d,nrmA,u,dbg);
-	d=    1940;nrmA=       -340;u= 1;check_b_d_n_u(b,d,nrmA,u,dbg);
 	d=       2;nrmA=         -1;u= 2;check_b_d_n_u(b,d,nrmA,u,dbg);
 }
 
@@ -339,7 +338,6 @@ check_b2()={
 	d=    1596;nrmA=      -3036;u= 1;check_b_d_n_u(b,d,nrmA,u,dbg);
 	d=    1940;nrmA=      -5440;u= 1;check_b_d_n_u(b,d,nrmA,u,dbg);
 	d=    2120;nrmA=     -15695;u= 1;check_b_d_n_u(b,d,nrmA,u,dbg);
-	d= 1006013;nrmA=   -8462039;u= 1;check_b_d_n_u(b,d,nrmA,u,dbg);
 	d=       2;nrmA=        -16;u= 2;check_b_d_n_u(b,d,nrmA,u,dbg);
 	d=       2;nrmA=        -28;u= 2;check_b_d_n_u(b,d,nrmA,u,dbg);
 	d=       3;nrmA=        -39;u= 2;check_b_d_n_u(b,d,nrmA,u,dbg);
@@ -347,7 +345,6 @@ check_b2()={
 	d=       3;nrmA=        -47;u= 2;check_b_d_n_u(b,d,nrmA,u,dbg);
 	d=      15;nrmA=       -231;u= 2;check_b_d_n_u(b,d,nrmA,u,dbg);
 	d=      37;nrmA=       -583;u= 2;check_b_d_n_u(b,d,nrmA,u,dbg);
-	d=     399;nrmA=       -759;u= 2;check_b_d_n_u(b,d,nrmA,u,dbg);
 	d=     485;nrmA=      -1360;u= 2;check_b_d_n_u(b,d,nrmA,u,dbg);
 }
 
