@@ -862,8 +862,7 @@ calc_gNSqr(t,u1,u2)={
 	my(d,e2,g1,g2,g3,gNSqr,gSqr,nSqr,v1);
 	
 	if(t>-1,
-		print("ERROR in calc_gNSqr(): t=",t," must be negative");
-		error();
+		error("ERROR in calc_gNSqr(): t=",t," must be negative");
 	);
 	g1=gcd(u1,u2);
 	g2=gcd(u1/g1,t);
@@ -915,11 +914,10 @@ calc_gnd4_from_nrmACore_and_xk(nrmA,xk)={
 round_down(num,places)={
 	my(e,v);
 	if(type(num)=="t_POL" || type(num)=="t_RFRAC",
-		print("ERROR in round_down(): num=",num," must a positive number. It is ",type(num));
-		error();
+		error("ERROR in round_down(): num=",num," must a positive number. It is ",type(num));
 	);
 	if(num<0 || num==0,
-		print("ERROR in round_down(): num=",num," must be positive");
+		error("ERROR in round_down(): num=",num," must be positive");
 		error();
 	);
 	e=floor(log(num)/log(10))-(places-1);
@@ -932,11 +930,11 @@ round_down(num,places)={
 round_up(num,places)={
 	my(e,v);
 	if(type(num)=="t_POL" || type(num)=="t_RFRAC",
-		print("ERROR in round_up(): num=",num," must a positive number. It is ",type(num));
+		error("ERROR in round_up(): num=",num," must a positive number. It is ",type(num));
 		error();
 	);
 	if(num<0 || num==0,
-		print("ERROR in round_up(): num=",num," must be positive");
+		error("ERROR in round_up(): num=",num," must be positive");
 		error();
 	);
 	e=floor(log(num)/log(10))-(places-1);
@@ -1039,16 +1037,13 @@ get_val(v,p)={
 	my(c,v1,vDen,vDenP,vNum,vNumP);
 
 	if(type(v)!="t_INT" && type(v)!="t_FRAC",
-		print("ERROR in get_val(): v=",v,", must be an integer or a rational number");
-		error();
+		error("ERROR in get_val(): v=",v,", must be an integer or a rational number");
 	);
 	if(p<2,
-		print("ERROR in get_val(): p=",p,", must be a positive integer that is prime");
-		error();
+		error("ERROR in get_val(): p=",p,", must be a positive integer that is prime");
 	);
 	if(!isprime(p),
-		print("ERROR in get_val(): p=",p,", must be a positive integer that is prime");
-		error();
+		error("ERROR in get_val(): p=",p,", must be a positive integer that is prime");
 	);
 	if(v==0,return(10000));
 	vNum=numerator(v);
@@ -1104,6 +1099,7 @@ get_largest_prime_factor(n)={
 \\ find integer squares among the first 20 (or whatever the upper bound in i for-loop) elements of the sequence formed from
 \\ y_{n+1}=c1*y_n-c0*y_{n-1}, so y_{n-1}=(c1*y_n-y_{n+1})/c0
 \\ the args d,a,b,t,u are only for logging. Here alpha=a+b*sqrt(d)
+\\ as of 10 Nov 2026, it now allows y_k=0 too
 \\
 \\ returns an array of three elements:
 \\ 1) the indices of the squares found
@@ -1136,11 +1132,11 @@ make_sequences(c0,c1,yM1,y0,yP1,d,a,b,t,u,dbg=0)={
 		yNegCurr=yM1;
 		for(i=1,80,
 			if(dbg!=0,print(i,": yPosCurr=",yPosCurr));
-			if(yPosCurr>0 && denominator(yPosCurr)==1 && issquare(yPosCurr),
+			if(denominator(yPosCurr)==1 && issquare(yPosCurr),
 				if(dbg!=0,print("SQR ",i,": yPosCurr=",yPosCurr));
 				indices=setunion(indices,Set([i]));
 				solns=setunion(solns,Set([sqrtint(yPosCurr)]));
-				if(i>iLB, \\ && length(solns)>3,
+				if(i>iLB && dbg!=0, \\ && length(solns)>3,
 					nrmA=a*a-d*b*b;
 					printf("BIG: added i:=%3d: yPosCurr:=%21d: for d:=%3d: a:=%8d: b:=%7d: t:=%5d: u:=%3d: nrmA:=%12d: solns:=%s:\n",i,yPosCurr,d,a,b,t,u,nrmA,solns);
 				);
@@ -1152,11 +1148,11 @@ make_sequences(c0,c1,yM1,y0,yP1,d,a,b,t,u,dbg=0)={
 
 			if(dbg!=0,print(i,": yNegCurr=",yNegCurr));
 			\\if(a==5 && b==8 && d==2,print("i=",i,", yNegCurr=",yNegCurr));
-			if(yNegCurr>0 && denominator(yNegCurr)==1 && issquare(yNegCurr),
+			if(denominator(yNegCurr)==1 && issquare(yNegCurr),
 				if(dbg!=0,print("SQR ",-i,": yNegCurr=",yNegCurr));
 				indices=setunion(indices,Set([-i]));
 				solns=setunion(solns,Set([sqrtint(yNegCurr)]));
-				if(i>iLB, \\ && length(solns)>3,
+				if(i>iLB && dbg!=0, \\ && length(solns)>3,
 					nrmA=a*a-d*b*b;
 					printf("BIG: added i:=%3d: yNegCurr:=%21d: for d:=%3d: a:=%8d: b:=%7d: t:=%5d: u:=%3d: nrmA:=%12d: solns:=%s:\n",-i,yNegCurr,d,a,b,t,u,nrmA,solns);
 				);
@@ -1177,6 +1173,7 @@ make_sequences(c0,c1,yM1,y0,yP1,d,a,b,t,u,dbg=0)={
 \\ this looks like the old notation where nrmA=-b and d=a^2+b
 \\ also d1=sqrt(y0) (we assume y0 is a sqr)
 \\ for helping with other functions
+\\ as of 10 Nov 2026, it now allows y_k=0 too
 \\ 24 Jan 2020
 output_squares(a,b,c0,c1,yM1,y0,yP1,t,u,dbg=0)={
 	my(yNegCurr,yNegPrev,yPosCurr,yPosPrev,yT);
@@ -1187,17 +1184,17 @@ output_squares(a,b,c0,c1,yM1,y0,yP1,t,u,dbg=0)={
 	yPosCurr=yP1;
 	yNegCurr=yM1;
 
-	printf("    %3d: y_i=%6d\n",0,y0);
+	printf("    %3d: y_i=%12d\n",0,y0);
 	for(i=1,12,
-		if(yPosCurr>0 && denominator(yPosCurr)==1 && issquare(yPosCurr),
-			printf("    %3d: y_i=%6d\n",i,yPosCurr);
+		if(denominator(yPosCurr)==1 && issquare(yPosCurr),
+			printf("    %3d: y_i=%12d\n",i,yPosCurr);
 		);
 		yT=c1*yPosCurr-c0*yPosPrev;
 		yPosPrev=yPosCurr;
 		yPosCurr=yT;
 
-		if(yNegCurr>0 && denominator(yNegCurr)==1 && issquare(yNegCurr),
-			if(dbg!=0,printf("    %3d: y_i=%6d\n",-i,yNegCurr));
+		if(denominator(yNegCurr)==1 && issquare(yNegCurr),
+			printf("    %3d: y_i=%12d\n",-i,yNegCurr);
 		);
 
 		\\ need to solve c1*yNegCurr-c0*yT=yNegPrev

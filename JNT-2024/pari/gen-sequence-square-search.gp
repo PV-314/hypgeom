@@ -6,17 +6,16 @@ read("../../general/pari/hypg-utils.gp");
 \\ gcd condition: (gcd(a,b)==1 || !issquare(gcd(a,b))) is needed
 \\ without allowing non-sqr gcds, we miss a=    672, b=    8281, d=      3, nrm=  -205273299, t=  4, u=  2: c0=         1, c1=    14, indices=[-4, -2, 0, 2], solns=[91, 875, 917, 12187]
 \\ use \p 60 if you have uUB=10^30
-conj11_search_more_gen_eSqr(dLB=2,dUB=100,useSmallA=1,dbg=0)={
-	my(aLB,aSize,aUB,b,b1Size,c0,c1,isPP,nrmA,nrmACore,nrmAOdd,nrmASet,pow2,solnM4,solnP4,t,u,solns,startTime,uUB,y0,yM1,yP1);
+\\
+conj11_search_more_gen_eSqr(dLB=2,dUB=1000,useSmallA=1,dbg=0)={
+	my(aLB,aSize,aUB,b,b1Size,c0,c1,isPP,nrmACore,nrmAOdd,nrmASet,solnM4,solnP4,startTime);
 
-	pow2=2^100;
-	aSize=1000;
+	aSize=2000;
 	b1Size=1000;
 	startTime=getwalltime();
-	uUB=10^30;
 	for(d=dLB,dUB,
 		if(d%1==0,print("\nd=",d,", time taken=",(getwalltime()-startTime),"(ms)"));
-		if(!issquare(d) && issquarefree(d),
+		if(!issquare(d), \\ && issquarefree(d),
 			solnM4=solve_pell_minus4(d);
 			solnP4=solve_pell_plus4(d);
 			if(length(solnM4)>0 || length(solnP4)>0,
@@ -28,156 +27,120 @@ conj11_search_more_gen_eSqr(dLB=2,dUB=100,useSmallA=1,dbg=0)={
 				);
 				nrmASet=Set(); \\ use this when looking for examples with "many" squares
 				for(b1=1,b1Size,
-				if(dbg!=0 && b1%100==0,print("d=",d,", b1=",b1,", time taken=",(getwalltime()-startTime),"(ms)"));
-				b=b1*b1;
-				
-				\\ search around small normA
-				aLB=max(1,floor(sqrt(b*b*d))-aSize/2);
-				aUB=aLB+aSize;
-				
-				if(useSmallA!=0,
-					\\ search around small a
-					aLB=1;
-					aUB=aSize;
-				);
-				
-				\\ other bounds
-				\\aUB=max(1200,ceil(sqrt(b*d))+300);
-				\\aUB=max(2*floor(sqrt(b*b*d)),floor(sqrt(b*b*d))+b1Size);
-				\\ gives nrmA positive:
-				\\aLB=ceil(sqrt(b*b*d));
-				if(dbg!=0 && b1%10==0,print("d=",d,", b1=",b1,", aLB=",aLB,", aUB=",aUB));
-				for(a=aLB,aUB,
-					nrmA=a*a-b*b*d;
-					if(issquarefree(gcd(a,b)) && length(solnM4)!=0 && denominator(nrmA)==1,
-						t=solnM4[1];
-						u=solnM4[2];
-						if(u<uUB,
-							c1=(t*t+u*u*d)/2; \\ trace of unit, e^2
-							c0=(t*t-u*u*d)/4;
-							c0=c0*c0;
-							y0=b;
-							yP1=(b*(t*t+d*u*u)+2*a*t*u)/4;
-							yM1=(b*(t*t+d*u*u)-2*a*t*u)/4;
+					if(dbg!=0 && b1%100==0,print("d=",d,", b1=",b1,", time taken=",(getwalltime()-startTime),"(ms)"));
+					b=b1*b1;
 
-							out=make_sequences(c0,c1,yM1,y0,yP1,d,a,b,t,u,dbg);
-							indices=out[1];
-							solns=out[2];
-							\\if(d==3 && a==2*242 && b==2*484,
-							\\	print("a=",a,", b=",b,", d=",d,", nrm=",nrm,", t=",t,", u=",u,", solns=",solns);
-							\\	print("yM1=",yM1,", yP1=",yP1);
-							\\);
+					\\ search around small normA
+					aLB=max(1,floor(sqrt(b*b*d))-aSize/2);
+					aUB=aLB+aSize;
 
-							isNrmAPP=(abs(nrmA)==1 || isprimepower(abs(nrmA)));
-							nrmACore=core(abs(nrmA));
-							isNrmACorePP=(nrmACore==1 || isprimepower(nrmACore));
-							nrmACoreOdd=core(nrmACore)/gcd(pow2,nrmACore);
-							isNrmACoreOddPP=(nrmACoreOdd==1 || isprimepower(nrmACoreOdd));
-							if(!issquare(abs(nrmA)) && isNrmAPP && length(solns)>3,
-								if(setsearch(nrmASet,nrmA)==0,
-									printf("UNIT-M1, NRM-PP (%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
-									output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
-									nrmASet=setunion(nrmASet,Set(nrmA));
-								);
-							);
-							if(!issquare(abs(nrmA)) && isNrmACorePP && length(solns)>3,
-								if(setsearch(nrmASet,nrmA)==0,
-									printf("UNIT-M1, NRM-PPC(%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
-									output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
-									nrmASet=setunion(nrmASet,Set(nrmA));
-								);
-							);
-							if(!issquare(abs(nrmA)) && nrmA%2==0 && isNrmACoreOddPP && length(solns)>3,
-								if(setsearch(nrmASet,nrmA)==0,
-									printf("UNIT-M1, NRM-2PP(%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
-									output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
-									nrmASet=setunion(nrmASet,Set(nrmA));
-								);
-							);
-							if(issquare(abs(nrmA)) && length(solns)>2,
-								if(setsearch(nrmASet,nrmA)==0,
-									printf("UNIT-M1, NRM-SQR(%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
-									output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
-									nrmASet=setunion(nrmASet,Set(nrmA));
-								);
-							);
-							if(length(solns)>2,
-								if(setsearch(nrmASet,nrmA)==0,
-									printf("UNIT-M1, RECORD(%1d)   : a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
-									output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
-									nrmASet=setunion(nrmASet,Set(nrmA));
-								);
-							);
+					if(useSmallA!=0,
+						\\ search around small a
+						aLB=1;
+						aUB=aSize;
+					);
+					for(a=aLB,aUB,
+						if(d==2 && a==3 && b==2,
+							print("starting...");
+						);
+						\\ checking sequence formed from norm epsilon=-1
+						if(issquarefree(gcd(a,b)) && length(solnM4)!=0 && denominator(nrmA)==1,
+							nrmASet=check_conj11_sequence("M1",a,b,d,solnM4,nrmASet,dbg);
+						);
+						
+						\\ checking sequence formed from norm epsilon=+1
+						if(issquarefree(gcd(a,b)) && length(solnP4)!=0 && denominator(nrmA)==1,
+							nrmASet=check_conj11_sequence("P1",a,b,d,solnP4,nrmASet,dbg);
+						);
+						if(d==2 && a==3 && b==2,
+							print("done");
 						);
 					);
-					if(issquarefree(gcd(a,b)) && length(solnP4)!=0 && denominator(nrmA)==1,
-						t=solnP4[1];
-						u=solnP4[2];
-						if(u<uUB,
-							c1=(t*t+u*u*d)/2; \\ trace of unit, e^2
-							c0=(t*t-u*u*d)/4;
-							c0=c0*c0;
-							y0=b;
-							yP1=(b*(t*t+d*u*u)+2*a*t*u)/4;
-							yM1=(b*(t*t+d*u*u)-2*a*t*u)/4;
-							\\if(d==3 && a==2*242 && b==2*484,
-							\\	print("a=",a,", b=",b,", d=",d,", nrm=",nrm,", t=",t,", u=",u,", c0=",c0,", c1=",c1,", yM1=",yM1,", y0=",y0,", yP1=",yP1);
-							\\);
-
-							out=make_sequences(c0,c1,yM1,y0,yP1,d,a,b,t,u,dbg);
-							indices=out[1];
-							solns=out[2];
-							\\if(d==3 && a==2*242 && b==2*484,
-							\\	print("a=",a,", b=",b,", d=",d,", nrm=",nrm,", t=",t,", u=",u,", solns=",solns);
-							\\);
-
-							isNrmAPP=(abs(nrmA)==1 || isprimepower(abs(nrmA)));
-							nrmACore=core(abs(nrmA));
-							isNrmACorePP=(nrmACore==1 || isprimepower(nrmACore));
-							nrmACoreOdd=core(nrmACore)/gcd(pow2,nrmACore);
-							isNrmACoreOddPP=(nrmACoreOdd==1 || isprimepower(nrmACoreOdd));
-							if(!issquare(abs(nrmA)) && isNrmAPP && length(solns)>3,
-								if(setsearch(nrmASet,nrmA)==0,
-									printf("UNIT-P1, NRM-PP (%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
-									output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
-									nrmASet=setunion(nrmASet,Set(nrmA));
-								);
-							);
-							if(!issquare(abs(nrmA)) && isNrmACorePP && length(solns)>3,
-								if(setsearch(nrmASet,nrmA)==0,
-									printf("UNIT-P1, NRM-PPC(%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
-									output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
-									nrmASet=setunion(nrmASet,Set(nrmA));
-								);
-							);
-							if(!issquare(abs(nrmA)) && nrmA%2==0 && isNrmACoreOddPP && length(solns)>3,
-								if(setsearch(nrmASet,nrmA)==0,
-									printf("UNIT-P1, NRM-2PP(%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
-									output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
-									nrmASet=setunion(nrmASet,Set(nrmA));
-								);
-							);
-							if(issquare(abs(nrmA)) && length(solns)>2,
-								if(setsearch(nrmASet,nrmA)==0,
-									printf("UNIT-P1, NRM-SQR(%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
-									output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
-									nrmASet=setunion(nrmASet,Set(nrmA));
-								);
-							);
-							if(length(solns)>2,
-								if(setsearch(nrmASet,nrmA)==0,
-									printf("UNIT-P1, RECORD(%1d)   : a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
-									output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
-									nrmASet=setunion(nrmASet,Set(nrmA));
-								);
-							);
-						);
-					);
-				);
-				);
+				); \\ end of b1 for-loop
 			);
 		);
 	);
+}
+
+\\ returns nrmASet so we can keep track of it
+check_conj11_sequence(msg,a,b,d,soln4,nrmASet,dbg=0)={
+	my(c0,c1,indices,isNrmACoreOddPP,isNrmACorePP,isNrmAPP,nrmA,nrmACore,nrmACoreOdd,out,pow2,solns,t,u,uUB,y0,yM1,yP1);
+	
+	nrmA=a*a-b*b*d;
+	pow2=2^100;
+	t=soln4[1];
+	u=soln4[2];
+	uUB=10^30;
+	if(u<uUB,
+		c1=(t*t+u*u*d)/2; \\ trace of unit, e^2
+		c0=(t*t-u*u*d)/4;
+		c0=c0*c0;
+		y0=b;
+		yP1=(b*(t*t+d*u*u)+2*a*t*u)/4;
+		yM1=(b*(t*t+d*u*u)-2*a*t*u)/4;
+
+		out=make_sequences(c0,c1,yM1,y0,yP1,d,a,b,t,u,dbg);
+		indices=out[1];
+		solns=out[2];
+		\\if(d==3 && a==2*242 && b==2*484,
+		\\	print("a=",a,", b=",b,", d=",d,", nrm=",nrm,", t=",t,", u=",u,", solns=",solns);
+		\\	print("yM1=",yM1,", yP1=",yP1);
+		\\);
+
+		isNrmAPP=(abs(nrmA)==1 || isprimepower(abs(nrmA)));
+		nrmACore=core(abs(nrmA));
+		isNrmACorePP=(nrmACore==1 || isprimepower(nrmACore));
+		nrmACoreOdd=core(nrmACore)/gcd(pow2,nrmACore);
+		isNrmACoreOddPP=(nrmACoreOdd==1 || isprimepower(nrmACoreOdd));
+		
+		if(!issquare(abs(nrmA)) && isNrmAPP && length(solns)>3,
+			\\if(setsearch(nrmASet,nrmA)==0,
+				printf("UNIT-%s, NRM-PP (%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",msg,length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
+				output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
+				nrmASet=setunion(nrmASet,Set(nrmA));
+				print();
+			\\);
+		);
+		if(!issquare(abs(nrmA)) && isNrmACorePP && length(solns)>3,
+			\\if(setsearch(nrmASet,nrmA)==0,
+				printf("UNIT-%s, NRM-PPC(%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",msg,length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
+				output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
+				nrmASet=setunion(nrmASet,Set(nrmA));
+				print();
+			\\);
+		);
+		if(!issquare(abs(nrmA)) && nrmA%2==0 && isNrmACoreOddPP && length(solns)>3,
+			\\if(setsearch(nrmASet,nrmA)==0,
+				printf("UNIT-%s, NRM-2PP(%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",msg,length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
+				output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
+				nrmASet=setunion(nrmASet,Set(nrmA));
+				print();
+			\\);
+		);
+		if(issquare(abs(nrmA)) && length(solns)>2,
+			\\if(setsearch(nrmASet,nrmA)==0,
+				printf("UNIT-%s, NRM-SQR(%1d): a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",msg,length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
+				output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
+				nrmASet=setunion(nrmASet,Set(nrmA));
+				print();
+			\\);
+		);
+		if(length(solns)>3,
+			\\if(setsearch(nrmASet,nrmA)==0,
+				printf("UNIT-%s, MANY(%1d)   : a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",msg,length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
+				output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
+				nrmASet=setunion(nrmASet,Set(nrmA));
+				print();
+			\\);
+		);
+		if(length(solns)>4,
+			printf("UNIT-%s, BIG RECORD(%1d)   : a=%7d, b=%8d, d=%7d, nrmA=%12d, t=%3d, u=%3d: c0=%10d, c1=%6d, indices=%s, solns=%s\n",msg,length(solns),a,b,d,nrmA,t,u,c0,c1,indices,solns);
+			output_squares(a,-nrmA,c0,c1,yM1,y0,yP1,t,u);
+			print();
+			return(1/0);
+		);
+	);
+	return(nrmASet);
 }
 
 \\ sequence of y_k's from (a+b*sqrt(d))*((t+u*sqrt(d))/2)^k (rather than ^(2*k))
